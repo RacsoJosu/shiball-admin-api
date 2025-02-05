@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+   
+    "target": "ES2022",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+     "moduleDetection": "force",                        /* Control what method is used to detect module-format JS files. */
+
+    /* Modules */
+    "module": "NodeNext",                                /* Specify what module code is generated. */
+    "resolveJsonModule": true,                        /* Enable importing .json files. */
+   
+    /* JavaScript Support */
+    "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
+   
+    /* Emit */
+   "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
+   "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
+   
+    /* Interop Constraints */
+    "isolatedModules": true,                          /* Ensure that each file can be safely transpiled without relying on other imports. */
+    "verbatimModuleSyntax": false,                     /* Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the 'module' setting. */
+    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
+
+    /* Type Checking */
+    "strict": true,                                      /* Enable all strict type-checking options. */
+    "noUncheckedIndexedAccess": true,                 /* Add 'undefined' to a type when accessed using an index. */
+    "noImplicitOverride": true,                       /* Ensure overriding members in derived classes are marked with an override modifier. */
+   
+    /* Completeness */
+    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+  },
+  "include": ["**/*"],
+  "exclude": ["dist"]
+}
