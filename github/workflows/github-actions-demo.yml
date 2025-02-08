@@ -1,1 +1,39 @@
 
+name: Node.js 22 CI
+
+on:
+  push:
+    branches:
+      - main  # Se ejecuta cuando haces push a la rama 'main'
+  pull_request:
+    branches:
+      - main  # También se ejecuta para pull requests hacia la rama 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Se ejecuta en una máquina Ubuntu más reciente
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2  # Descarga el código del repositorio
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'  # Configura Node.js versión 22
+
+      - name: Install dependencies
+        run: npm install  # Instala las dependencias definidas en package.json
+
+      - name: Run tests
+        run: npm test  # Ejecuta los tests definidos en package.json
+
+      - name: Lint code
+        run: npm run lint  # Ejecuta la tarea de linting (si tienes configurado un linter)
+
+      - name: Build project
+        run: npm run build  # Ejecuta la tarea de construcción (si tienes un script 'build')
+
+      - name: Deploy (opcional)
+        run: npm run deploy  # Ejecuta la tarea de despliegue (si tienes un script 'deploy')
+        if: github.ref == 'refs/heads/main'  # Solo se ejecuta en la rama 'main'
