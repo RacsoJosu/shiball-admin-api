@@ -19,12 +19,15 @@ model User {
   firstName      String?
   lastName      String?
   password  String
+  userSecret String
   role      Role     @default(USER)
   birthDate DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
 }
+
+
 
 enum Role {
   ADMIN
