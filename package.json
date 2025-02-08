@@ -13,7 +13,8 @@
     "watch-dev": "nodemon --watch ./server --exec tsx ./server/server.index.ts",
     "build": "swc server -d dist",
     "start": "tsx ./dist/server.index.js",
-    "db:migrate": "npx prisma migrate dev --name user-entity --create-only && npx prisma generate",
+    "db:migrate": "npx prisma migrate dev --name  --create-only",
+    "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push"
   },
   "keywords": [],
@@ -43,18 +44,20 @@
     "jiti": "^2.4.2",
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
+    "prisma": "^6.3.1",
     "tsx": "^4.3.0",
     "typescript": "^5.7.3",
-    "prisma": "^6.3.1",
     "typescript-eslint": "^8.22.0"
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
+    "express": "^5.0.1",
     "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "zod": "^3.24.1"
   }
 }

@@ -11,7 +11,7 @@ export async function prismaConnect() {
     console.log("✅ Database connected");
   } catch (error) {
     console.error("❌ Database connection failed", error);
-    process.exit(1); // Detiene el proceso si la DB no se conecta
+    process.exit(1); 
   }
 }
 
