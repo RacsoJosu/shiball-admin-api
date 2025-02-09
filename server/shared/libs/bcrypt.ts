@@ -5,13 +5,13 @@ const saltRounds = 10
 
 
 export async function hashPasswordSync( password: string) {
-    const salt = await  bcrypt.genSaltSync(saltRounds)   
-    return bcrypt.hashSync(password, salt)
+    const salt = await  bcrypt.genSalt(saltRounds)   
+    return await bcrypt.hash(password, salt)
     
 }
 
 export async function comparePasswordAsync(password:string,passwordHash: string) {
-    return bcrypt.compareSync(password, passwordHash)
+    return await bcrypt.compare(password, passwordHash)
     
 }
 

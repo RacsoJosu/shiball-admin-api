@@ -58,12 +58,12 @@ export class ApiError<T = null> extends Error {
 
   getResponse() {
     return {
-      details: this.details,
-      data: this.data,
       title: this.title,
-      success: this.success,
+      details: this.details,
       statuscode: this.statusCode,
-      stack:  this.stack,
+      success: this.success,
+      data: this.data,
+      stack: process.env.NODE_ENV === "production" ? null: this.stack ,
     };
   }
 }
