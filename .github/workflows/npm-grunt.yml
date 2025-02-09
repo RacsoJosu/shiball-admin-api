@@ -17,6 +17,6 @@ jobs:
     - name: "install"
       run: "npm install"   
     - name: "Build"
-      run: "npm run buld"
+      run: "npm run build"
     - name: "comment"
       run: echo "build exitoso"  
