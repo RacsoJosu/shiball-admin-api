@@ -2,25 +2,21 @@ name: NodeJS with Grunt
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master", "dev" ]
+  pull_request: 
+    branches: [ "main", "master", "dev" ]  
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Build
-      run: |
-        npm install
-        grunt
+    - name: Checkout code
+      uses: actions/checkout@v3 
+    - name: Move to correct directory
+      run: cd /home/runner/work/shiball-admin-api    
+    - name: "install"
+      run: "npm install"   
+    - name: "Build"
+      run: "npm run build"
+    - name: "comment"
+      run: echo "build exitoso"  
