@@ -1,33 +1,23 @@
 import { Request, Response } from 'express';
-import { createUser, findUserByEmail } from './auth.service';
-import { ApiError } from '../../middlewares/statusCode';
-import { comparePasswordAsync } from '../../shared/libs/bcrypt';
 import z from 'zod';
-import { loginUserSchema } from './auth.schemas';
-import { signJwtUser } from '../../shared/libs/jwt';
+import { prisma } from '../../config/prisma';
+import { loginUserSchema, registerUserSchema } from './auth.schemas';
+import { AuthService } from './auth.service';
+import { UserRepository } from './auth.repository';
+// Iniciar dependencias
+const userRepository = new UserRepository(prisma);
+const authService = new AuthService(userRepository);
 
 export async function postResgisterUser(req: Request, res: Response) {
-  const { body: values } = req;
+  const values = registerUserSchema.parse(req.body);
+  const userRegistered = await authService.addUser(values);
 
-  const user = await findUserByEmail(values.email);
-
-  if (user) {
-    throw new ApiError({
-      title: 'El usuario ya existe',
-      details: `El usuario con email ${values.email} ya existe`,
-      statusCode: 400,
-      success: false,
-    });
-  }
-
-  const userResgister = await createUser(values);
-
-  res.status(200).json({
+  res.status(201).json({
     message: 'Usuario creado',
     title: 'Usuario registrado',
     data: {
-      idUser: userResgister.id,
-      email: userResgister.email,
+      idUser: userRegistered.id,
+      email: userRegistered.email,
     },
   });
 }
@@ -35,42 +25,35 @@ export async function postResgisterUser(req: Request, res: Response) {
 export async function postLogiUser(req: Request, res: Response) {
   const { body: values }: { body: z.infer<typeof loginUserSchema> } = req;
 
-  const user = await findUserByEmail(values.email);
+  const { token, infoUser } = await authService.login(values);
 
-  if (!user) {
-    throw new ApiError({
-      title: 'El usuario no existe',
-      details: `El usuario con email ${values.email} no esta registrado.`,
-      statusCode: 400,
-      success: false,
+  res
+    .status(200)
+    .cookie('ACCESS_TOKEN', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 100 * 60 * 60,
+    })
+    .json({
+      message: 'Login correcto',
+      title: 'Usuario ha iniciado sesión correctamente.',
+      data: {
+        token,
+        infoUser,
+      },
     });
-  }
+}
 
-  const isValidatePassword = await comparePasswordAsync(
-    values.password,
-    user.password
-  );
 
-  if (!isValidatePassword) {
-    throw new ApiError({
-      title: 'Contraseña incorrecta',
-      details: `La contraseña que ha ingresado es incorrecta.`,
-      statusCode: 400,
-      success: false,
+export async function postLogoutUser(req: Request, res: Response) {
+  
+  res
+    .clearCookie("ACCESS_TOKEN")
+    .status(200)
+    .json({
+      message: 'Logout correcto',
+      title: 'Se ha cerrado sesión correctamente.',
+      
     });
-  }
-
-  const token = signJwtUser({
-    email: user.email,
-    id: user.id,
-    userSecret: user.userSecret,
-  });
-
-  res.status(200).json({
-    message: 'Login correcto',
-    title: 'Usuario ha iniciado sesión correctamente.',
-    data: {
-      token,
-    },
-  });
 }
