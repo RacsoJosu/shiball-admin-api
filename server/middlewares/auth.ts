@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { ApiError } from './statusCode';
-import { decodeJwt } from '../shared/libs/jwt';
+import { decodeJwt, signJwtUser } from '../shared/libs/jwt';
 import { prisma } from '../config/prisma';
-// import '../types/express'; 
+import dayjs from 'dayjs';
+// import '../types/express';
 interface UserPayload {
   id: string;
   tokenUser: string;
@@ -26,9 +27,7 @@ export async function authGuard(
     });
   }
 
-
-   
-  const decodeAuth = decodeJwt(token) as UserPayload;
+  const decodeAuth = decodeJwt(token);
 
   const user = await prisma.user.findUnique({
     where: {
@@ -43,14 +42,33 @@ export async function authGuard(
       details: 'Usuario no existe',
     });
   }
-  const userTokenDecode = decodeJwt(decodeAuth.tokenUser, user?.userSecret) as UserTokenPayload;
+  const userTokenDecode = decodeJwt(decodeAuth.tokenUser, user?.userSecret);
 
-    
-    req.user = {
-        id: user.id,
-        email: userTokenDecode.email,
-        role: userTokenDecode.role
-    }
+  req.user = {
+    id: user.id,
+    email: userTokenDecode.email,
+    role: userTokenDecode.role,
+  };
 
-    next()
+  const now = dayjs();
+  const tokenExp = dayjs.unix(decodeAuth.exp || 0);
+  const threeDaysLater = now.add(3, 'days');
+
+  let newToken = null;
+  if (tokenExp.isBefore(threeDaysLater)) {
+    req.user.token = signJwtUser({
+      email: req.user.email,
+      role: req.user.role,
+      id: req.user.id,
+      userSecret: user?.userSecret,
+    });
+    res.cookie('ACCESS_TOKEN', newToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 3 * 24 * 60 * 60,
+    });
+  }
+
+  next();
 }

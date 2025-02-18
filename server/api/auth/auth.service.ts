@@ -41,8 +41,8 @@ export class AuthService {
     const token = signJwtUser({
       email: user.email,
       id: user.id,
-        userSecret: user.userSecret,
-      role: user.role
+      userSecret: user.userSecret,
+      role: user.role,
     });
 
     const infoUser = {
@@ -79,5 +79,40 @@ export class AuthService {
       password: hashPassword,
       secretKey: secretKey,
     });
+  }
+
+  async getInfoAuthUser(params: { email: string; token?: string }) {
+    const user = await this.userRepository.findUserByEmail(params.email);
+
+    if (!user) {
+      throw new ApiError({
+        title: 'El usuario no existe',
+        details: `El usuario con email ${params.email} no esta registrado.`,
+        statusCode: 400,
+        success: false,
+      });
+    }
+
+    let token = null;
+
+    if (!params.token) {
+      token = await signJwtUser({
+        email: user.email,
+        id: user.id,
+        userSecret: user.userSecret,
+        role: user.role,
+      });
+    }
+
+    const infoUser = {
+      id: user.id,
+      email: user.email,
+      name: `${user.firstName?.split(' ')[0]} ${user.lastName?.split(' ')[0]}`,
+    };
+
+    return {
+      infoUser,
+      token: params.token ? params.token : token
+    };
   }
 }

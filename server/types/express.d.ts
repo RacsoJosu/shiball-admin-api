@@ -5,6 +5,7 @@ interface UserContext {
   id: string;
   email: string;
   role: string;
+  token?:string
     
 }
 declare global {
