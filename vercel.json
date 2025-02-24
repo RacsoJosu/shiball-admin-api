@@ -12,7 +12,7 @@
       "dest": "server/api/vercel.ts"
     }
   ],
-    "buildCommand": "npm install && npx prisma generate  --schema=./prisma/schema.prisma && npm run build",
+    "buildCommand": "npm install && npm run db:generate && npm run build",
       "env": {
     "PRISMA_SCHEMA_PATH": "./prisma/schema.prisma"
   }
