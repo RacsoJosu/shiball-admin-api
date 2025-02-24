@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "prisma": {
+      "schema": "./prisma/schema.prisma"
+    },
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"npm run watch-compile\" \"npm run watch-dev\"",
     "lint": "eslint .",
@@ -16,7 +19,7 @@
     "db:migrate": "npx prisma migrate dev --name  --create-only",
     "db:generate": "npx prisma generate --schema=./prisma/schema.prisma",
     "db:push": "npx prisma db push",
-      "postinstall": "prisma generate --schema=./prisma/schema.prisma"
+    "postinstall": "prisma generate --schema=./prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",
