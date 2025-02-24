@@ -16,7 +16,7 @@
     "db:migrate": "npx prisma migrate dev --name  --create-only",
     "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push",
-     "postinstall": "prisma generate"
+      "postinstall": "prisma generate --schema=./prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",
