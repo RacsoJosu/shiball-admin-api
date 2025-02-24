@@ -26,7 +26,7 @@ export async function postResgisterUser(req: Request, res: Response) {
 export async function postLogiUser(req: Request, res: Response) {
   const { body: values }: { body: z.infer<typeof loginUserSchema> } = req;
 
-  const { token, infoUser } = await authService.login(values);
+  const { token } = await authService.login(values);
 
   res
     .status(200)
@@ -34,22 +34,19 @@ export async function postLogiUser(req: Request, res: Response) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge:  604800,
+      maxAge: 604800000,
     })
     .json({
       message: 'Login correcto',
       title: 'Usuario ha iniciado sesión correctamente.',
-      data: {
-        token,
-        infoUser,
-      },
+      data: null,
     });
 }
 
 export async function postLogoutUser(req: Request, res: Response) {
   res.clearCookie('ACCESS_TOKEN').status(200).json({
-    message: 'Logout correcto',
-    title: 'Se ha cerrado sesión correctamente.',
+    message: 'Se ha cerrado sesión correctamente.',
+    title: 'Logout correcto',
   });
 }
 
@@ -63,11 +60,10 @@ export async function getUserAuthInfo(req: Request, res: Response) {
       details: 'Usuario no existe.',
     });
   }
-  //TODO: mejorar la forma de obtener el token 
-  const cookies = req.headers.cookie?.split("; ")
-  const tokenCookie =cookies[0]?.split("=")[1]
 
-  const { infoUser, token } = await authService.getInfoAuthUser({
+  const tokenCookie = req.cookies.ACCESS_TOKEN;
+
+  const { infoUser } = await authService.getInfoAuthUser({
     email: user.email || '',
     token: tokenCookie,
   });
@@ -75,9 +71,6 @@ export async function getUserAuthInfo(req: Request, res: Response) {
   res.status(200).json({
     message: 'Login correcto',
     title: 'Usuario ha iniciado sesión correctamente.',
-    data: {
-      infoUser,
-      token,
-    },
+    data: infoUser
   });
 }
