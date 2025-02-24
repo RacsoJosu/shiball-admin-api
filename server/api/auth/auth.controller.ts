@@ -1,33 +1,24 @@
 import { Request, Response } from 'express';
-import { createUser, findUserByEmail } from './auth.service';
-import { ApiError } from '../../middlewares/statusCode';
-import { comparePasswordAsync } from '../../shared/libs/bcrypt';
 import z from 'zod';
-import { loginUserSchema } from './auth.schemas';
-import { signJwtUser } from '../../shared/libs/jwt';
+import { prisma } from '../../config/prisma';
+import { loginUserSchema, registerUserSchema } from './auth.schemas';
+import { AuthService } from './auth.service';
+import { UserRepository } from './auth.repository';
+import { ApiError } from '../../middlewares/statusCode';
+// Iniciar dependencias
+const userRepository = new UserRepository(prisma);
+const authService = new AuthService(userRepository);
 
 export async function postResgisterUser(req: Request, res: Response) {
-  const { body: values } = req;
+  const values = registerUserSchema.parse(req.body);
+  const userRegistered = await authService.addUser(values);
 
-  const user = await findUserByEmail(values.email);
-
-  if (user) {
-    throw new ApiError({
-      title: 'El usuario ya existe',
-      details: `El usuario con email ${values.email} ya existe`,
-      statusCode: 400,
-      success: false,
-    });
-  }
-
-  const userResgister = await createUser(values);
-
-  res.status(200).json({
+  res.status(201).json({
     message: 'Usuario creado',
     title: 'Usuario registrado',
     data: {
-      idUser: userResgister.id,
-      email: userResgister.email,
+      idUser: userRegistered.id,
+      email: userRegistered.email,
     },
   });
 }
@@ -35,42 +26,51 @@ export async function postResgisterUser(req: Request, res: Response) {
 export async function postLogiUser(req: Request, res: Response) {
   const { body: values }: { body: z.infer<typeof loginUserSchema> } = req;
 
-  const user = await findUserByEmail(values.email);
+  const { token } = await authService.login(values);
+
+  res
+    .status(200)
+    .cookie('ACCESS_TOKEN', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 604800000,
+    })
+    .json({
+      message: 'Login correcto',
+      title: 'Usuario ha iniciado sesión correctamente.',
+      data: null,
+    });
+}
+
+export async function postLogoutUser(req: Request, res: Response) {
+  res.clearCookie('ACCESS_TOKEN').status(200).json({
+    message: 'Se ha cerrado sesión correctamente.',
+    title: 'Logout correcto',
+  });
+}
+
+export async function getUserAuthInfo(req: Request, res: Response) {
+  const { user } = req;
 
   if (!user) {
     throw new ApiError({
-      title: 'El usuario no existe',
-      details: `El usuario con email ${values.email} no esta registrado.`,
+      title: 'No existe el usuario',
       statusCode: 400,
-      success: false,
+      details: 'Usuario no existe.',
     });
   }
 
-  const isValidatePassword = await comparePasswordAsync(
-    values.password,
-    user.password
-  );
+  const tokenCookie = req.cookies.ACCESS_TOKEN;
 
-  if (!isValidatePassword) {
-    throw new ApiError({
-      title: 'Contraseña incorrecta',
-      details: `La contraseña que ha ingresado es incorrecta.`,
-      statusCode: 400,
-      success: false,
-    });
-  }
-
-  const token = signJwtUser({
-    email: user.email,
-    id: user.id,
-    userSecret: user.userSecret,
+  const { infoUser } = await authService.getInfoAuthUser({
+    email: user.email || '',
+    token: tokenCookie,
   });
 
   res.status(200).json({
     message: 'Login correcto',
     title: 'Usuario ha iniciado sesión correctamente.',
-    data: {
-      token,
-    },
+    data: infoUser
   });
 }

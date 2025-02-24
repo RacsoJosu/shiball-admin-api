@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "typeRoots": [
+    "./node_modules/@types",  
+      "./types"    
+    ],
    
     "target": "ES2022",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
      "moduleDetection": "force",                        /* Control what method is used to detect module-format JS files. */
