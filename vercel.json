@@ -12,6 +12,6 @@
       "dest": "server/api/vercel.ts"
     }
   ],
-   "buildCommand": "npm run build && npx prisma generate"
+    "buildCommand": "npm install && npx prisma generate && npm run build"
 
 }
