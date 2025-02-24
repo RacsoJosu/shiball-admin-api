@@ -12,7 +12,7 @@
     "watch-compile": "swc server -w --out-dir dist",
     "watch-dev": "nodemon --watch ./server --exec tsx ./server/server.index.ts",
     "build": "swc server -d dist",
-    "start": "tsx ./dist/server.index.js",
+    "start": "node ./dist/server.index.js",
     "db:migrate": "npx prisma migrate dev --name  --create-only",
     "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push"
