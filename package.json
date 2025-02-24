@@ -15,7 +15,8 @@
     "start": "node ./dist/server.index.js",
     "db:migrate": "npx prisma migrate dev --name  --create-only",
     "db:generate": "npx prisma generate",
-    "db:push": "npx prisma db push"
+    "db:push": "npx prisma db push",
+     "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",

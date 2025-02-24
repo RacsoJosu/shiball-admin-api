@@ -11,5 +11,7 @@
       "src": "/(.*)",
       "dest": "server/api/vercel.ts"
     }
-  ]
+  ],
+   "buildCommand": "npm run build && npx prisma generate"
+
 }
