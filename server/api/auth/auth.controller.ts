@@ -30,7 +30,7 @@ export async function postLogiUser(req: Request, res: Response) {
 
   res
     .status(200)
-    .cookie('AUTH_TOKEN', token, {
+    .cookie('ACCESS_TOKEN', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -44,7 +44,7 @@ export async function postLogiUser(req: Request, res: Response) {
 }
 
 export async function postLogoutUser(req: Request, res: Response) {
-  res.clearCookie('AUTH_TOKEN').status(200).json({
+  res.clearCookie('ACCESS_TOKEN').status(200).json({
     message: 'Se ha cerrado sesión correctamente.',
     title: 'Logout correcto',
   });
@@ -61,7 +61,7 @@ export async function getUserAuthInfo(req: Request, res: Response) {
     });
   }
 
-  const tokenCookie = req.cookies.AUTH_TOKEN;
+  const tokenCookie = req.cookies.ACCESS_TOKEN;
 
   const { infoUser } = await authService.getInfoAuthUser({
     email: user.email || '',

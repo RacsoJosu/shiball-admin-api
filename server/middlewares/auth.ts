@@ -17,7 +17,7 @@ export async function authGuard(
   res: Response,
   next: NextFunction
 ) {
-  const token = req.cookies.AUTH_TOKEN;
+  const token = req.cookies.ACCESS_TOKEN;
 
   if (!token) {
     throw new ApiError({
@@ -62,7 +62,7 @@ export async function authGuard(
       id: req.user.id,
       userSecret: user?.userSecret,
     });
-    res.cookie('AUTH_TOKEN', newToken, {
+    res.cookie('ACCESS_TOKEN', newToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
