@@ -24,6 +24,7 @@ export async function authGuard(
       statusCode: 401,
       title: 'No autorizado',
       details: 'Token no encontrado',
+      data: req.cookies
     });
   }
 
