@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import z from 'zod';
-import { prisma } from '../../config/prisma';
+import { prisma } from '../../config/db';
 import { loginUserSchema, registerUserSchema } from './auth.schemas';
 import { AuthService } from './auth.service';
 import { UserRepository } from './auth.repository';
@@ -30,7 +30,7 @@ export async function postLogiUser(req: Request, res: Response) {
 
   res
     .status(200)
-    .cookie('ACCESS_TOKEN', token, {
+    .cookie('AUTH_TOKEN', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -44,7 +44,7 @@ export async function postLogiUser(req: Request, res: Response) {
 }
 
 export async function postLogoutUser(req: Request, res: Response) {
-  res.clearCookie('ACCESS_TOKEN').status(200).json({
+  res.clearCookie('AUTH_TOKEN').status(200).json({
     message: 'Se ha cerrado sesión correctamente.',
     title: 'Logout correcto',
   });
@@ -61,7 +61,7 @@ export async function getUserAuthInfo(req: Request, res: Response) {
     });
   }
 
-  const tokenCookie = req.cookies.ACCESS_TOKEN;
+  const tokenCookie = req.cookies.AUTH_TOKEN;
 
   const { infoUser } = await authService.getInfoAuthUser({
     email: user.email || '',

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ApiError } from './statusCode';
 import { decodeJwt, signJwtUser } from '../shared/libs/jwt';
-import { prisma } from '../config/prisma';
+import { prisma } from '../config/db';
 import dayjs from 'dayjs';
 // import '../types/express';
 interface UserPayload {
@@ -17,7 +17,7 @@ export async function authGuard(
   res: Response,
   next: NextFunction
 ) {
-  const token = req.cookies.ACCESS_TOKEN;
+  const token = req.cookies.AUTH_TOKEN;
 
   if (!token) {
     throw new ApiError({
@@ -62,7 +62,7 @@ export async function authGuard(
       id: req.user.id,
       userSecret: user?.userSecret,
     });
-    res.cookie('ACCESS_TOKEN', newToken, {
+    res.cookie('AUTH_TOKEN', newToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
