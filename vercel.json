@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "headers": [
     {
       "source": "/api/(.*)",
@@ -17,15 +16,7 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "server/api/vercel.ts"
-    }
-  ],
-
-      "env": {
+  "env": {
     "PRISMA_SCHEMA_PATH": "./prisma/schema.prisma"
   }
-
 }
