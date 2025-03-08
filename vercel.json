@@ -6,9 +6,6 @@
       "use": "@vercel/node"
     }
   ],
-  "functions": {
-    "api/*.ts": { "runtime": "@vercel/node" }
-  },
   "headers": [
     {
       "source": "/api/(.*)",
