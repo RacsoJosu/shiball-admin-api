@@ -6,18 +6,14 @@
       "use": "@vercel/node"
     }
   ],
-  "functions":{
-    "src":"/(.*)"
+  "functions": {
+    "api/*.ts": { "runtime": "@vercel/node" }
   },
- 
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://shinball-fronted.vercel.app" },
-        { "key": "Access-Control-Allow-Origin", "value": "https://shinball-fronted-g1hd271xg-oscarvallecillos-projects.vercel.app" },
-         { "key": "Access-Control-Allow-Origin", "value": "http://localhost:5173" },
-
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
