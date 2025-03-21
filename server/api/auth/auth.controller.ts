@@ -33,7 +33,7 @@ export async function postLogiUser(req: Request, res: Response) {
     .cookie('AUTH_TOKEN', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'none',
       maxAge: 604800000,
     })
     .json({
