@@ -44,6 +44,7 @@ export async function postLogiUser(req: Request, res: Response) {
 }
 
 export async function postLogoutUser(req: Request, res: Response) {
+  
   res.clearCookie('AUTH_TOKEN').status(200).json({
     message: 'Se ha cerrado sesión correctamente.',
     title: 'Logout correcto',

@@ -30,6 +30,17 @@ export async function authGuard(
 
   const decodeAuth = decodeJwt(token);
 
+
+  if (!decodeAuth.id) {
+     throw new ApiError({
+      statusCode: 401,
+      title: 'No autorizado',
+      details: 'Token no encontrado',
+      data: req.cookies
+    });
+    
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       id: decodeAuth.id,
