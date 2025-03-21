@@ -18,6 +18,7 @@ export async function authGuard(
   next: NextFunction
 ) {
   const token = req.cookies.AUTH_TOKEN;
+  console.log({cookies: req.cookies})
   console.log({token})
   if (!token) {
     throw new ApiError({
