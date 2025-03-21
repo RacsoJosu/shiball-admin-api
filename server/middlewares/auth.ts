@@ -18,7 +18,7 @@ export async function authGuard(
   next: NextFunction
 ) {
   const token = req.cookies.AUTH_TOKEN;
-
+  console.log({token})
   if (!token) {
     throw new ApiError({
       statusCode: 401,
@@ -30,7 +30,7 @@ export async function authGuard(
 
   const decodeAuth = decodeJwt(token);
 
-
+  console.log({decodeAuth})
   if (!decodeAuth.id) {
      throw new ApiError({
       statusCode: 401,
