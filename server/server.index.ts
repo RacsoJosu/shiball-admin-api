@@ -14,7 +14,7 @@ const app: Express = express();
 
 const PORT = process.env.PORT || 3001;
 app.use( cors({
-    origin: ["http://localhost:5173", "https://shinball-fronted.vercel.app","https://shinball-fronted-git-dev-oscarvallecillos-projects.vercel.app"],
+    origin: ["http://localhost:5173", "https://shinball-fronted.vercel.app","https://shinball-fronted-git-dev-oscarvallecillos-projects.vercel.app", "https://shinball-fronted-git-main-oscarvallecillos-projects.vercel.app"],
     credentials: true, 
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE"], 
