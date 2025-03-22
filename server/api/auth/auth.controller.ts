@@ -27,7 +27,7 @@ export async function postLogiUser(req: Request, res: Response) {
   const { body: values }: { body: z.infer<typeof loginUserSchema> } = req;
 
   const { token } = await authService.login(values);
-
+  console.log({token})
   res
     .status(200)
     .cookie('AUTH_TOKEN', token, {
@@ -40,7 +40,7 @@ export async function postLogiUser(req: Request, res: Response) {
     .json({
       message: 'Login correcto',
       title: 'Usuario ha iniciado sesión correctamente.',
-      data: null,
+      data: token,
     });
 }
 
