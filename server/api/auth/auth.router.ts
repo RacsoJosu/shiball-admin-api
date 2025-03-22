@@ -11,7 +11,7 @@ const router = express.Router();
 router.post("/registrar", validateData(registerUserSchema), postResgisterUser);
 router.post("/login", validateData(loginUserSchema), postLogiUser);
 router.post("/logout", authGuard, postLogoutUser)
-router.post("/me", authGuard, getUserAuthInfo)
+router.get("/me", authGuard, getUserAuthInfo)
 
 router.get("/test", authGuard, function (req: Request, res: Response) {
     const { user } = req;
