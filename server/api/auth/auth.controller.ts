@@ -36,7 +36,7 @@ export async function postLogiUser(req: Request, res: Response) {
       sameSite: 'none',
       path: "/",
       maxAge: 604800000,
-      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined
+      domain: process.env.NODE_ENV === 'production' ? 'shiball-admin-api.vercel.app' : undefined
     
     })
     .json({
