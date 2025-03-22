@@ -27,7 +27,7 @@ export async function postLogiUser(req: Request, res: Response) {
   const { body: values }: { body: z.infer<typeof loginUserSchema> } = req;
 
   const { token } = await authService.login(values);
-  console.log({token})
+
   res
     .status(200)
     .cookie('AUTH_TOKEN', token, {
@@ -35,7 +35,8 @@ export async function postLogiUser(req: Request, res: Response) {
       secure: process.env.NODE_ENV === 'production',
       sameSite:'none',
       maxAge: 604800000,
-      domain: process.env.NODE_ENV === 'production' ? '.vercel.app': undefined
+      domain: process.env.NODE_ENV === 'production' ? 'vercel.app' : undefined
+    
     })
     .json({
       message: 'Login correcto',
