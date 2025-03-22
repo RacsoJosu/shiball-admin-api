@@ -29,16 +29,18 @@ export async function postLogiUser(req: Request, res: Response) {
   const { token } = await authService.login(values);
 
   res
-    .status(200)
     .cookie('AUTH_TOKEN', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: 'lax',
       path: "/",
       maxAge: 604800000,
-      domain: process.env.NODE_ENV === 'production' ? 'shiball-admin-api.vercel.app' : undefined
+      // domain: process.env.NODE_ENV === 'production' ? 'shiball-admin-api.vercel.app' : undefined
     
     })
+
+
+    res.status(200)
     .json({
       message: 'Login correcto',
       title: 'Usuario ha iniciado sesión correctamente.',
