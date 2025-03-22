@@ -33,9 +33,9 @@ export async function postLogiUser(req: Request, res: Response) {
     .cookie('AUTH_TOKEN', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite:process.env.NODE_ENV === 'production' ? 'none':'lax',
+      sameSite:'none',
       maxAge: 604800000,
-      domain: process.env.NODE_ENV === 'production' ? ".vercel.app": undefined
+      domain: process.env.NODE_ENV === 'production' ? '.vercel.app': undefined
     })
     .json({
       message: 'Login correcto',
