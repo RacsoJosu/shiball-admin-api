@@ -13,9 +13,10 @@ dotenv.config();
 const app: Express = express();
 
 const PORT = process.env.PORT || 3001;
-app.use( cors({
+app.use(cors({
+   credentials: true, 
     origin: ["http://localhost:5173", "https://shinball-fronted.vercel.app","https://shinball-fronted-git-dev-oscarvallecillos-projects.vercel.app", "https://shinball-fronted-git-main-oscarvallecillos-projects.vercel.app", "https://14nq1k5k-3000.use.devtunnels.ms"],
-    credentials: true, 
+   
   
   }));
 app.use(morgan('dev'));
