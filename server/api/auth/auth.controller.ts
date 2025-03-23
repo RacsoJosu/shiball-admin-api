@@ -14,7 +14,7 @@ export async function postResgisterUser(req: Request, res: Response) {
   const values = registerUserSchema.parse(req.body);
   const userRegistered = await authService.addUser(values);
 
-  res.status(201).json({
+  res.status(201).send({
     message: 'Usuario creado',
     title: 'Usuario registrado',
     data: {
@@ -22,6 +22,7 @@ export async function postResgisterUser(req: Request, res: Response) {
       email: userRegistered.email,
     },
   });
+  return
 }
 
 export async function postLogiUser(req: Request, res: Response) {
@@ -36,18 +37,19 @@ export async function postLogiUser(req: Request, res: Response) {
       sameSite: 'lax',
       path: "/",
       maxAge: 604800000,
-      expires: dayjs().add(7, "day").toDate(),
       // domain: process.env.NODE_ENV === 'production' ? 'shiball-admin-api.vercel.app' : undefined
     
     })
 
 
-    res.status(200)
-    .json({
+   res.status(200)
+    .send({
       message: 'Login correcto',
       title: 'Usuario ha iniciado sesión correctamente.',
       data: token,
     });
+  
+  return;
 }
 
 export async function postLogoutUser(req: Request, res: Response) {
@@ -56,6 +58,7 @@ export async function postLogoutUser(req: Request, res: Response) {
     message: 'Se ha cerrado sesión correctamente.',
     title: 'Logout correcto',
   });
+  return;
 }
 
 export async function getUserAuthInfo(req: Request, res: Response) {
@@ -76,9 +79,11 @@ export async function getUserAuthInfo(req: Request, res: Response) {
     token: tokenCookie,
   });
 
-  res.status(200).json({
+  res.status(200).send({
     message: 'Login correcto',
     title: 'Usuario ha iniciado sesión correctamente.',
     data: infoUser
   });
+
+  return;
 }

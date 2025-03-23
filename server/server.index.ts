@@ -32,7 +32,9 @@ app.use((req: Request, res: Response) => {
 });
 app.use(errorHandler);
 
-prismaConnect();
+(async () => {
+  await prismaConnect()
+})();
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
