@@ -5,6 +5,7 @@ import { loginUserSchema, registerUserSchema } from './auth.schemas';
 import { AuthService } from './auth.service';
 import { UserRepository } from './auth.repository';
 import { ApiError } from '../../middlewares/statusCode';
+import dayjs from 'dayjs';
 // Iniciar dependencias
 const userRepository = new UserRepository(prisma);
 const authService = new AuthService(userRepository);
@@ -35,7 +36,8 @@ export async function postLogiUser(req: Request, res: Response) {
       sameSite: 'lax',
       path: "/",
       maxAge: 604800000,
-      // domain: process.env.NODE_ENV === 'production' ? 'shiball-admin-api.vercel.app' : undefined
+      expires: dayjs().add(7, "day").toDate(),
+      domain: process.env.NODE_ENV === 'production' ? 'shiball-admin-api.vercel.app' : undefined
     
     })
 
