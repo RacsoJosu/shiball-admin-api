@@ -9,6 +9,7 @@ import authRouter from "./auth/auth.router";
 export function getRouter() {
     const router = express.Router();
     router.use("/auth", authRouter);
+    router.use("/usuarios", usersRouter)
 
     return router
 }

@@ -17,27 +17,33 @@ export async function authGuard(
   res: Response,
   next: NextFunction
 ) {
-  const token = req.cookies.AUTH_TOKEN;
-  console.log(req.cookies)
+  let token = null;
+
+  const authHeader = req.headers.authorization;
+
+  if (authHeader?.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
+  } else {
+    token = req.cookies.AUTH_TOKEN;
+  }
   if (!token) {
     throw new ApiError({
       statusCode: 401,
       title: 'No autorizado',
       details: 'Token no encontrado',
-      data: req.cookies
+      data: req.cookies,
     });
   }
 
   const decodeAuth = decodeJwt(token);
 
   if (!decodeAuth.id) {
-     throw new ApiError({
+    throw new ApiError({
       statusCode: 401,
       title: 'No autorizado',
       details: 'Token no encontrado',
-      data: req.cookies
+      data: req.cookies,
     });
-    
   }
 
   const user = await prisma.user.findUnique({
@@ -77,7 +83,7 @@ export async function authGuard(
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge:  604800000,
+      maxAge: 604800000,
     });
   }
 
