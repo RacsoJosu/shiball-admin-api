@@ -13,24 +13,35 @@ export class UserRepository {
   }
 
   async findAll(search?: string) {
+    if (search) {
+      search = `%${search.replaceAll(" ", "%")}%`
+    }
+
     let where = {};
     if (search) {
       where = {
         OR: [
           {
             email: {
-              contains: search.toLowerCase(),
+              contains: search,
+              mode: "insensitive"
             },
           },
           {
             
             firstName: {
-              contains: search.toLowerCase(),
+              contains: search,
+              startsWith: search,
+              mode: "insensitive"
+
             },
           },
           {
             lastName: {
-              contains: search.toLowerCase(),
+              contains: search,
+              startsWith: search,
+              mode: "insensitive"
+
             },
           },
         ],
