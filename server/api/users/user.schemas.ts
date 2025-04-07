@@ -1,5 +1,8 @@
 import z from "zod";
 
-export const seachParamsSchema = z.object({
-    search: z.string().optional()
+export const searchPaginationParamsSchema = z.object({
+    search: z.string().optional(),
+    limit: z.coerce.number().optional(),
+    page: z.coerce.number().optional(),
+    
 })

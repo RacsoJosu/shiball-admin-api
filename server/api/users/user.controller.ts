@@ -1,19 +1,26 @@
 import { Request, Response } from 'express';
-import { prisma } from '../../config/db';
-import { UserRepository } from '../auth/auth.repository';
 import { UserService } from './user.service';
-import { seachParamsSchema } from './user.schemas';
+import { searchPaginationParamsSchema } from './user.schemas';
+import { inject, injectable } from 'inversify';
+import TYPES_USER from './user.types';
 
-const userRepository = new UserRepository(prisma);
-const userService = new UserService(userRepository);
-export async function getAllUsers(req: Request, res: Response) {
-    const values = await seachParamsSchema.parseAsync(req.query)
-    console.log(req.query)
-  const users = await userService.getAll(values.search);
+
+@injectable()
+export class UserController {
+
+  constructor(@inject(TYPES_USER.UserService) private userService: UserService) { }
+  
+  async getAllUsers(req: Request, res: Response) {
+    const values = await searchPaginationParamsSchema.parseAsync(req.query)
+    const data = await this.userService.getAll(values);
+
   res.status(200).json({
     message: 'Lista de usuarios',
     title: 'Usuarios obtenidos',
-    data: users,
+    data,
   });
   return;
 }
+
+}
+

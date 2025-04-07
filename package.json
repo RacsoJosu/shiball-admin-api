@@ -11,7 +11,7 @@
     "format:check": "prettier --check .",
     "watch-compile": "swc server -w --out-dir dist",
     "watch-dev": "nodemon --watch ./server --exec tsx ./server/server.index.ts",
-    "build": "prisma generate  --schema=./prisma/schema.prisma && swc server -d dist",
+    "build": "prisma generate  --schema=./prisma/schema.prisma && tsc --noEmit && swc server -d dist",
     "start": "node ./dist/server.index.js",
     "db:migrate": "npx prisma migrate dev --name  --create-only",
     "db:generate": "npx prisma generate --schema=./prisma/schema.prisma",
@@ -55,15 +55,17 @@
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",
-    "@vercel/node": "^5.1.8",
+    "@vercel/node": "^2.3.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "express": "^5.0.1",
+    "inversify": "^7.0.0-alpha.5",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "reflect-metadata": "^0.2.2",
     "zod": "^3.24.1"
   }
 }

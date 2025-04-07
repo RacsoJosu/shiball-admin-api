@@ -20,8 +20,9 @@ export async function authGuard(
   let token = null;
 
   const authHeader = req.headers.authorization;
+  
 
-  if (authHeader?.startsWith('Bearer ')) {
+  if (authHeader && authHeader?.startsWith('Bearer ')) {
     token = authHeader.split(' ')[1];
   } else {
     token = req.cookies.AUTH_TOKEN;

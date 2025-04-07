@@ -1,8 +1,11 @@
+import 'reflect-metadata';
+
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser'
+
 import { prismaConnect } from './config/db';
 import { errorHandler } from './middlewares/errorHandler';
 import { getRouter } from './api/router';
