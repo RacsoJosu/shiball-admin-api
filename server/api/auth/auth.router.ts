@@ -11,7 +11,7 @@ import container from "../containers/container";
 const router = express.Router();
 const authController = container.get<AuthController>(TYPES_AUTH.AuthController)
 
-router.post("/registrar", validateData(registerUserSchema), authController.postResgisterUser.bind(authController));
+router.post("/signup", validateData(registerUserSchema), authController.postResgisterUser.bind(authController));
 router.post("/login", validateData(loginUserSchema), authController.postLogiUser.bind(authController));
 router.post("/logout", authGuard, authController.postLogoutUser.bind(authController));
 router.get("/me", authGuard, authController.getUserAuthInfo.bind(authController));

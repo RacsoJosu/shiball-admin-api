@@ -11,10 +11,10 @@
     "format:check": "prettier --check .",
     "watch-compile": "swc server -w --out-dir dist",
     "watch-dev": "nodemon --watch ./server --exec tsx ./server/server.index.ts",
-    "build": "prisma generate  --schema=./prisma/schema.prisma && tsc --noEmit && swc server -d dist",
+    "build": "prisma generate --no-engine   --schema=./prisma/schema.prisma && tsc --noEmit && swc server -d dist",
     "start": "node ./dist/server.index.js",
     "db:migrate": "npx prisma migrate dev --name  --create-only",
-    "db:generate": "npx prisma generate --schema=./prisma/schema.prisma",
+    "db:generate": "npx prisma generate --no-engine --schema=./prisma/schema.prisma",
     "db:push": "npx prisma db push",
     "postinstall": "prisma generate --schema=./prisma/schema.prisma"
   },
