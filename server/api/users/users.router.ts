@@ -1,9 +1,9 @@
 
 import express from "express";
-import { authGuard } from "../../middlewares/auth";
+import { authGuard } from "@middlewares/auth";
 import { UserController } from "./user.controller";
 import TYPES_USER from "./user.types";
-import container from "../containers/container";
+import container from "@api/containers/container";
 
 const userController = container.get<UserController>(TYPES_USER.UserController);
 const router = express.Router();

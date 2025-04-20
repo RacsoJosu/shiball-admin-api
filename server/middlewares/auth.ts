@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ApiError } from './statusCode';
-import { decodeJwt, signJwtUser } from '../shared/libs/jwt';
-import { prisma } from '../config/db';
+import { decodeJwt, signJwtUser } from '@shared/libs/jwt';
+import { prisma } from '@config/db';
 import dayjs from 'dayjs';
 // import '../types/express';
 interface UserPayload {

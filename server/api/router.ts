@@ -1,8 +1,8 @@
 import express from "express";
 
-import usersRouter from "./users/users.router";
-import authRouter from "./auth/auth.router";
-import seedRouter from "./seed/seed.router"
+import usersRouter from "@api/users/users.router";
+import authRouter from "@api/auth/auth.router";
+import seedRouter from "@api/seed/seed.router"
 
 
 

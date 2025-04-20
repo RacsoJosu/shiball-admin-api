@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { prisma } from '../../config/db';
+import { prisma } from '@config/db';
 import { SEED_USER } from './data/data';
-import { UserService } from '../users/user.service';
-import { UserRepository } from '../users/user.repository';
+import { UserService } from '@api/users/user.service';
+import { UserRepository } from '@api/users/user.repository';
 // Iniciar dependencias
 const userRepository = new UserRepository(prisma);
 const authService = new UserService(userRepository);

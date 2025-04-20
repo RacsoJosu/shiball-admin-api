@@ -3,6 +3,16 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["server/*"],
+      "@types/*": ["server/types/*"],
+      "@shared/*": ["server/shared/*"],
+      "@config/*": ["server/config/*"],
+      "@api/*": ["server/api/*"],
+      "@middlewares/*": ["server/middlewares/*"],
+
+    },
 
     "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "moduleDetection": "force" /* Control what method is used to detect module-format JS files. */,

@@ -7,7 +7,16 @@
       "dynamicImport": true
     },
     "target": "es2022",
-    "baseUrl": "./server"
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["server/*"],
+      "@types/*": ["server/types/*"],
+      "@shared/*": ["server/shared/*"],
+      "@config/*": ["server/config/*"],
+      "@api/*": ["server/api/*"],
+      "@middlewares/*": ["server/middlewares/*"]
+
+    }
   },
   "module": {
     "type": "nodenext"

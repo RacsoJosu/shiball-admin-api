@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { ApiError } from '../../middlewares/statusCode';
+import { ApiError } from '@middlewares/statusCode';
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY || '';
 

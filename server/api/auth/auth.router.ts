@@ -1,12 +1,12 @@
 
 import express, { Request, Response } from "express";
-import { validateData } from "../../middlewares/validatorData";
-import { loginUserSchema, registerUserSchema } from "./auth.schemas";
-import { authGuard } from "../../middlewares/auth";
+import { validateData } from "@middlewares/validatorData";
+import { authGuard } from "@middlewares/auth";
+import container from "@api/containers/container";
 
+import { loginUserSchema, registerUserSchema } from "./auth.schemas";
 import { AuthController } from "./auth.controller";
 import { TYPES_AUTH } from "./auth.types";
-import container from "../containers/container";
 
 const router = express.Router();
 const authController = container.get<AuthController>(TYPES_AUTH.AuthController)

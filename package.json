@@ -9,7 +9,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "watch-compile": "swc server -w --out-dir dist",
+    "watch-compile": "swc server -w --config-file .swcrc --out-dir dist",
     "watch-dev": "nodemon --watch ./server --exec tsx ./server/server.index.ts",
     "build": "prisma generate --no-engine   --schema=./prisma/schema.prisma && tsc --noEmit && swc server -d dist",
     "start": "node ./dist/server.index.js",
