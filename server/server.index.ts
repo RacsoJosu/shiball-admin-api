@@ -4,30 +4,33 @@ import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser'
+import cookieParser from 'cookie-parser';
 
 import { prismaConnect } from '@config/db';
 import { errorHandler } from '@middlewares/errorHandler';
 import { getRouter } from '@/api/router';
 
-
 dotenv.config();
 
 const app: Express = express();
 
-const PORT = process.env.PORT || 3001;
-app.use(cors({
-   credentials: true, 
-  origin: ["http://localhost:5173",
-    "http://localhost:3000",
-    "https://shinball-fronted.vercel.app", "https://shinball-fronted-git-dev-oscarvallecillos-projects.vercel.app", "https://shinball-fronted-git-main-oscarvallecillos-projects.vercel.app", "https://14nq1k5k-3000.use.devtunnels.ms"],
-   
-  
-  }));
+const PORT = process.env.PORT ?? 3001;
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      'https://shinball-fronted.vercel.app',
+      'http://localhost:3000',
+      'https://shinball-fronted-git-dev-oscarvallecillos-projects.vercel.app',
+      'https://shinball-fronted-git-main-oscarvallecillos-projects.vercel.app',
+      'https://14nq1k5k-3000.use.devtunnels.ms',
+    ],
+  })
+);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 app.use('/api', getRouter());
 app.get('/test', (req, res) => {
   res.json({ message: 'Ruta de prueba funcionando' });
@@ -39,9 +42,9 @@ app.use((req: Request, res: Response) => {
 app.use(errorHandler);
 
 (async () => {
-  await prismaConnect()
+  await prismaConnect();
 })();
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-export default app
+export default app;
