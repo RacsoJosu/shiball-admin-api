@@ -8,9 +8,8 @@ import { UserService } from '@api/users/user.service';
 
 @injectable()
 export class AuthController {
-
   constructor(
-    @inject(TYPES_USER.UserService) private userService: UserService
+    @inject(TYPES_USER.UserService) private readonly userService: UserService
   ) {
     console.log('AuthController initialized, userService:', !!userService);
   }
@@ -27,7 +26,6 @@ export class AuthController {
         email: userRegistered.email,
       },
     });
-    return;
   }
 
   async postLogiUser(req: Request, res: Response) {
@@ -48,18 +46,13 @@ export class AuthController {
       title: 'Usuario ha iniciado sesión correctamente.',
       data: token,
     });
-
-    return;
   }
 
   async postLogoutUser(req: Request, res: Response) {
-
-    
     res.clearCookie('AUTH_TOKEN').status(200).json({
       message: 'Se ha cerrado sesión correctamente.',
       title: 'Logout correcto',
     });
-    return;
   }
 
   async getUserAuthInfo(req: Request, res: Response) {
@@ -75,7 +68,6 @@ export class AuthController {
 
     const tokenCookie = req.cookies.AUTH_TOKEN;
 
-
     const { infoUser } = await this.userService.getInfoAuthUser({
       email: user.email || '',
       token: tokenCookie,
@@ -86,7 +78,5 @@ export class AuthController {
       title: 'Usuario ha iniciado sesión correctamente.',
       data: infoUser,
     });
-
-    return;
   }
 }

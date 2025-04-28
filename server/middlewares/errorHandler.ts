@@ -28,17 +28,15 @@ export function errorHandler(
   }
 
   if (err instanceof JsonWebTokenError) {
-    
     const response = new ApiError({
-      title: "Unathorized",
+      title: 'Unathorized',
       details: err.message,
       statusCode: 401,
       success: false,
-      
     });
 
-    console.error(response.stack)
-    delete response.stack
+    console.error(response.stack);
+    delete response.stack;
 
     res.status(response.statusCode).json(response.getResponse());
     return;
@@ -55,5 +53,4 @@ export function errorHandler(
   res
     .status(response.statusCode)
     .json({ ...err, details: response.details, title: response.title });
-  return;
 }

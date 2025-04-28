@@ -17,7 +17,8 @@ import { searchPaginationParamsSchema } from './user.schemas';
 @injectable()
 export class UserService {
   constructor(
-    @inject(TYPES.UserRepository) private userRepository: UserRepository
+    @inject(TYPES.UserRepository)
+    private readonly userRepository: UserRepository
   ) {}
 
   async login(params: z.infer<typeof loginUserSchema>) {
@@ -154,7 +155,7 @@ export class UserService {
     let token = null;
 
     if (!params.token) {
-      token = await signJwtUser({
+      token = signJwtUser({
         email: user.email,
         id: user.id,
         userSecret: user.userSecret,
@@ -170,7 +171,7 @@ export class UserService {
 
     return {
       infoUser,
-      token: params.token ? params.token : token,
+      token: params.token ?? token,
     };
   }
 }

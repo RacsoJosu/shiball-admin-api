@@ -1,5 +1,5 @@
 import z from 'zod';
-import {  PrismaClient, User } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import dayjs from 'dayjs';
 import { createUserSquemaRepository } from '@api/auth/auth.schemas';
 import { pagination } from '@shared/libs/helpers';
@@ -17,7 +17,9 @@ export class UserRepository
     IWrite<User, z.infer<typeof createUserSquemaRepository>>,
     IRead<UserDTO>
 {
-  constructor(@inject(TYPES.databaseConnection) private prisma: PrismaClient) {}
+  constructor(
+    @inject(TYPES.databaseConnection) private readonly prisma: PrismaClient
+  ) {}
 
   async update(
     id: string,

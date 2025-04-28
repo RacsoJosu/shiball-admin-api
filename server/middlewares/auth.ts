@@ -3,15 +3,7 @@ import { ApiError } from './statusCode';
 import { decodeJwt, signJwtUser } from '@shared/libs/jwt';
 import { prisma } from '@config/db';
 import dayjs from 'dayjs';
-// import '../types/express';
-interface UserPayload {
-  id: string;
-  tokenUser: string;
-}
-interface UserTokenPayload {
-  role: string;
-  email: string;
-}
+
 export async function authGuard(
   req: Request,
   res: Response,
@@ -20,9 +12,8 @@ export async function authGuard(
   let token = null;
 
   const authHeader = req.headers.authorization;
-  
 
-  if (authHeader && authHeader?.startsWith('Bearer ')) {
+  if (authHeader?.startsWith('Bearer ')) {
     token = authHeader.split(' ')[1];
   } else {
     token = req.cookies.AUTH_TOKEN;
@@ -69,7 +60,7 @@ export async function authGuard(
   };
 
   const now = dayjs();
-  const tokenExp = dayjs.unix(decodeAuth.exp || 0);
+  const tokenExp = dayjs.unix(decodeAuth.exp ?? 0);
   const threeDaysLater = now.add(3, 'days');
 
   let newToken = null;

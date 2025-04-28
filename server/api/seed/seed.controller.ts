@@ -15,5 +15,4 @@ export async function postResgisterManyUser(req: Request, res: Response) {
     title: 'Usuarios registrados',
     data,
   });
-  return
 }
