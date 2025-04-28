@@ -6,17 +6,7 @@
       "decorators": true,
       "dynamicImport": true
     },
-    "target": "es2022",
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["server/*"],
-      "@types/*": ["server/types/*"],
-      "@shared/*": ["server/shared/*"],
-      "@config/*": ["server/config/*"],
-      "@api/*": ["server/api/*"],
-      "@middlewares/*": ["server/middlewares/*"]
-
-    }
+    "target": "es2022"
   },
   "module": {
     "type": "nodenext"

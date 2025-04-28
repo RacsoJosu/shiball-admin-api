@@ -3,12 +3,12 @@ import {
   comparePasswordAsync,
   genSecretKeyUser,
   hashPasswordSync,
-} from '@shared/libs/bcrypt';
-import { ApiError } from '@middlewares/statusCode';
-import { signJwtUser } from '@shared/libs/jwt';
+} from '../../shared/libs/bcrypt';
+import { ApiError } from '../../middlewares/statusCode';
+import { signJwtUser } from '../../shared/libs/jwt';
 import { User } from '@prisma/client';
-import { loginUserSchema, registerUserSchema } from '@api/auth/auth.schemas';
-import { pagination } from '@shared/libs/helpers';
+import { loginUserSchema, registerUserSchema } from '../auth/auth.schemas';
+import { pagination } from '../../shared/libs/helpers';
 import { UserRepository } from './user.repository';
 import { inject, injectable } from 'inversify';
 import TYPES from './user.types';

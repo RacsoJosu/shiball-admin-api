@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import z from 'zod';
 import { loginUserSchema, registerUserSchema } from './auth.schemas';
-import { ApiError } from '@middlewares/statusCode';
 import { inject, injectable } from 'inversify';
-import TYPES_USER from '@api/users/user.types';
-import { UserService } from '@api/users/user.service';
-
+import { UserService } from '../users/user.service';
+import TYPES_USER from '../users/user.types';
+import { ApiError } from '../../middlewares/statusCode';
 @injectable()
 export class AuthController {
   constructor(

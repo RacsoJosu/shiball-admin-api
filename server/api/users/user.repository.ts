@@ -1,14 +1,14 @@
 import z from 'zod';
 import { PrismaClient, User } from '@prisma/client';
 import dayjs from 'dayjs';
-import { createUserSquemaRepository } from '@api/auth/auth.schemas';
-import { pagination } from '@shared/libs/helpers';
-import { IRead, IWrite } from '@shared/interfaces';
 import { injectable, inject } from 'inversify';
 import TYPES from './user.types';
 import { searchPaginationParamsSchema } from './user.schemas';
 import { userSafeSchema } from './dto/user.dto';
 import { updateUserInput } from './dto/input-update.user.dto';
+import { createUserSquemaRepository } from '../auth/auth.schemas';
+import { IRead, IWrite } from '../../shared/interfaces';
+import { pagination } from '../../shared/libs/helpers';
 type UserDTO = z.infer<typeof userSafeSchema>;
 type UpdateUserInput = z.infer<typeof updateUserInput>;
 @injectable()
