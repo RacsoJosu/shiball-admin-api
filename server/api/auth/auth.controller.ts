@@ -48,10 +48,19 @@ export class AuthController {
   }
 
   async postLogoutUser(req: Request, res: Response) {
-    res.clearCookie('AUTH_TOKEN').status(200).json({
-      message: 'Se ha cerrado sesión correctamente.',
-      title: 'Logout correcto',
-    });
+    res
+      .clearCookie('AUTH_TOKEN', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
+        path: '/',
+        maxAge: 604800000,
+      })
+      .status(200)
+      .json({
+        message: 'Se ha cerrado sesión correctamente.',
+        title: 'Logout correcto',
+      });
   }
 
   async getUserAuthInfo(req: Request, res: Response) {
