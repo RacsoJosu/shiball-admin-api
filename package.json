@@ -13,7 +13,7 @@
     "watch-dev": "nodemon --watch ./server --exec tsx ./server/server.index.ts",
     "build": "prisma generate --no-engine   --schema=./prisma/schema.prisma && tsc --noEmit && swc server -d dist",
     "start": "node ./dist/server.index.js",
-    "db:migrate": "npx prisma migrate dev --name  --create-only",
+    "db:migrate": "npx prisma migrate dev --name  $npm_config_name  --create-only",
     "db:generate": "npx prisma generate --no-engine --schema=./prisma/schema.prisma",
     "db:push": "npx prisma db push",
     "postinstall": "prisma generate --schema=./prisma/schema.prisma"
