@@ -99,7 +99,6 @@ export class UserRepository
         firstName: true,
         birthDate: true,
         email: true,
-        role: true,
       },
       skip,
       take: limit,

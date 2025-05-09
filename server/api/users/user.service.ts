@@ -51,7 +51,7 @@ export class UserService {
       email: user.email,
       id: user.id,
       userSecret: user.userSecret,
-      role: user.role,
+      role: '',
     });
 
     const infoUser = {
@@ -159,7 +159,7 @@ export class UserService {
         email: user.email,
         id: user.id,
         userSecret: user.userSecret,
-        role: user.role,
+        role: '',
       });
     }
 
@@ -167,7 +167,7 @@ export class UserService {
       id: user.id,
       email: user.email,
       name: `${user.firstName?.split(' ')[0]} ${user.lastName?.split(' ')[0]}`,
-      role: user.role,
+
       birthDate: user.birthDate,
       createdAt: user.createdAt,
     };

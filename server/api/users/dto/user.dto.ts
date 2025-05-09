@@ -6,7 +6,6 @@ export const userSchema = z.object({
   firstName: z.string().nullable(),
   lastName: z.string().nullable(),
   birthDate: z.date().nullable(),
-  role: z.enum(['ADMIN', 'USER']), // según los valores de tu enum Role
   userSecret: z.string(),
   password: z.string(),
   createdAt: z.date(),
@@ -14,7 +13,6 @@ export const userSchema = z.object({
   deletedAt: z.date().nullable(),
 });
 export const userSafeSchema = userSchema.omit({
-  
   deletedAt: true,
   updatedAt: true,
   createdAt: true,
