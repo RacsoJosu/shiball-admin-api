@@ -1,10 +1,10 @@
-import {
-    Router
-} from "express";
-import { postResgisterManyUser } from "./seed.controller";
-const router = Router()
+import { Router } from 'express';
+import container from '../containers/container';
+import { SeedController } from './seed.controller';
+import TYPES_SEED from './seed.types';
+const router = Router();
+const seedModule = container.get<SeedController>(TYPES_SEED.SEED_CONTROLLER);
 
+router.get('/usuarios', seedModule.postResgisterManyUser.bind(SeedController));
 
-router.get("/usuarios", postResgisterManyUser)
-
-export default router
+export default router;

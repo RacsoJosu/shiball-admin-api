@@ -1,18 +1,32 @@
 import { Request, Response } from 'express';
 import { SEED_USER } from './data/data';
-import { UserRepository } from '../users/user.repository';
-import { prisma } from '../../config/db';
+import { inject, injectable } from 'inversify';
+import TYPES_USER from '../users/user.types';
 import { UserService } from '../users/user.service';
-// Iniciar dependencias
-const userRepository = new UserRepository(prisma);
-const authService = new UserService(userRepository);
 
-export async function postResgisterManyUser(req: Request, res: Response) {
-  const data = await authService.addManyUser(SEED_USER);
+@injectable()
+export class SeedController {
+  constructor(
+    @inject(TYPES_USER.UserService) private readonly userService: UserService
+  ) {
+    console.log('SeedController initialized, userService:', !!userService);
+  }
+  async postResgisterManyUser(req: Request, res: Response) {
+    const data = await this.userService.addManyUser(SEED_USER);
 
-  res.status(200).send({
-    message: 'Usuarios creados',
-    title: 'Usuarios registrados',
-    data,
-  });
+    res.status(200).send({
+      message: 'Usuarios creados',
+      title: 'Usuarios registrados',
+      data,
+    });
+  }
+  async postRegisterManyRolesUser(req: Request, res: Response) {
+    const data = null;
+
+    res.status(200).send({
+      message: 'Usuarios creados',
+      title: 'Usuarios registrados',
+      data,
+    });
+  }
 }

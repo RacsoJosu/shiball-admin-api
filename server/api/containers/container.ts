@@ -2,18 +2,22 @@ import { Container } from 'inversify';
 import { bindUserModule } from './bindings/user.binding';
 import { bindAuthModule } from './bindings/auth.binding';
 import { PrismaClient } from '@prisma/client';
-import TYPES_USER from '../users/user.types';
+
 import { prisma } from '../../config/db';
+import { bindSeedModule } from './bindings/seed.binding';
+import { bindAllModule } from './bindings/all-bindings';
+import TYPES_COMMON from '../../types/common.types';
 
 const container = new Container();
 
 // Prisma como singleton
 container
-  .bind<PrismaClient>(TYPES_USER.databaseConnection)
+  .bind<PrismaClient>(TYPES_COMMON.databaseConnection)
   .toConstantValue(prisma);
 
 // Cargar módulos
 bindUserModule(container);
 bindAuthModule(container);
+bindSeedModule(container);
 
 export default container;

@@ -8,7 +8,9 @@ import TYPES_USER from './user.types';
 export class UserController {
   constructor(
     @inject(TYPES_USER.UserService) private readonly userService: UserService
-  ) {}
+  ) {
+    console.log('Controller initialized, userService:', !!userService);
+  }
 
   async getAllUsers(req: Request, res: Response) {
     const values = await searchPaginationParamsSchema.parseAsync(req.query);
