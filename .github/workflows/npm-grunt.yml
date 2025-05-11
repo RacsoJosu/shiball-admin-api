@@ -15,8 +15,8 @@ jobs:
     - name: Move to correct directory
       run: cd /home/runner/work/shiball-admin-api    
     - name: "install"
-      run: "npm install"   
+      run: "pnpm install"   
     - name: "Build"
-      run: "npm run build"
+      run: "pnpm run build"
     - name: "comment"
       run: echo "build exitoso"  
