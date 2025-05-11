@@ -2,21 +2,23 @@ name: NodeJS with Grunt
 
 on:
   push:
-    branches: [ "main", "master", "dev" ]
-  pull_request: 
-    branches: [ "main", "master", "dev" ]  
+    branches: ['main', 'master', 'dev']
+  pull_request:
+    branches: ['main', 'master', 'dev']
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3 
-    - name: Move to correct directory
-      run: cd /home/runner/work/shiball-admin-api    
-    - name: "install"
-      run: "pnpm install"   
-    - name: "Build"
-      run: "pnpm run build"
-    - name: "comment"
-      run: echo "build exitoso"  
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Move to correct directory
+        run: cd /home/runner/work/shiball-admin-api
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: 'install'
+        run: 'pnpm install'
+      - name: 'Build'
+        run: 'pnpm run build'
+      - name: 'comment'
+        run: echo "build exitoso"
