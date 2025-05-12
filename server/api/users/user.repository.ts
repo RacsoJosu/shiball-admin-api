@@ -14,8 +14,8 @@ type UpdateUserInput = z.infer<typeof updateUserInput>;
 @injectable()
 export class UserRepository
   implements
-    IWrite<User, z.infer<typeof createUserSquemaRepository>>,
-    IRead<UserDTO>
+    IWrite<User, z.infer<typeof createUserSquemaRepository>, User['id']>,
+    IRead<UserDTO, User['id']>
 {
   constructor(
     @inject(TYPES.databaseConnection) private readonly prisma: PrismaClient

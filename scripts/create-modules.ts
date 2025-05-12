@@ -22,7 +22,7 @@ async function main() {
     console.error(`❌ El módulo "${moduleName}" ya existe.`);
     return;
   }
-  mkdirSync(basePath, { recursive: true });
+
   const files = [
     { name: 'schemas', content: schemaTemplate(moduleName) },
     { name: 'service', content: serviceTemplate(moduleName) },
@@ -41,6 +41,7 @@ async function main() {
     initial: true,
   });
 
+  mkdirSync(basePath, { recursive: true });
   if (!confirmCreateAll) {
     const { filesSelected } = await prompts({
       type: 'multiselect',
@@ -85,12 +86,9 @@ function schemaTemplate(name: string) {
 // ${name}.schema.ts
 import { z } from 'zod';
 
-export const create${pascal}SquemaRepository = z.object({
+export const input${pascal}CreateSchema = z.object({
   id: z.string(),
 });
-
-
-export const ${name}SafeSchema = create${pascal}SquemaRepository
 `.trimStart();
 }
 
@@ -194,71 +192,100 @@ import z from 'zod';
 import { PrismaClient, ${pascal} } from '@prisma/client';
 import { injectable, inject } from 'inversify';
 import TYPES_COMMON from '../../types/common.types';
-import { ${name}SafeSchema, create${pascal}SquemaRepository } from './${name}.schemas';
+import { input${pascal}CreateSchema } from './${name}.schemas';
 import { IRead, IWrite } from '../../shared/interfaces';
 import { pagination } from '../../shared/libs/helpers';
 import { searchPaginationParamsSchema } from '../../shared/schemas';
-type ${pascal}DTO = z.infer<typeof ${name}SafeSchema>;
+import dayjs from 'dayjs';
+
+type ${pascal}DTO = z.infer<typeof input${pascal}CreateSchema>;
+type ${pascal}UpdateInput = Partial<${pascal}DTO>;
 @injectable()
 export class ${pascal}Repository
   implements
-    IWrite<${pascal}, z.infer<typeof create${pascal}SquemaRepository>>,
-    IRead<${pascal}DTO>
+    IWrite<${pascal}, ${pascal}DTO,${pascal}["id"]>,
+    IRead<${pascal}DTO, ${pascal}["id"]>
 {
   constructor(
     @inject(TYPES_COMMON.databaseConnection) private readonly prisma: PrismaClient
   ) {}
 
-  create(element: { id: string }): Promise<{
-    name: string;
-    id: bigint;
-    description: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
-  } | null> {
-    throw new Error('Method not implemented.');
+  async create(element:${pascal}DTO): Promise<${pascal} | null> {
+    return this.prisma.${name}.create({data: { ...element, createdAt: dayjs().toDate(),updatedAt: dayjs().toDate(), },})
   }
-  update(
-    id: string,
-    element: Partial<{ id: string }>
-  ): Promise<{
-    name: string;
-    id: bigint;
-    description: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
-  } | null> {
-    throw new Error('Method not implemented.');
+  async update(
+    id: ${pascal}["id"],
+    element:${pascal}UpdateInput
+  ): Promise<${pascal} | null> {
+    return this.prisma.${name}.update({
+          data: {
+            ...element,
+            updatedAt: dayjs().toDate(),
+          },
+          where: {
+            id,
+          },
+        });
   }
-  delete(id: string): Promise<{
-    name: string;
-    id: bigint;
-    description: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
-  } | null> {
-    throw new Error('Method not implemented.');
+  async delete(id: ${pascal}["id"]): Promise<${pascal} | null> {
+     return this.prisma.${name}.update({
+          data: {
+            deletedAt: dayjs().toDate(),
+          },
+          where: {
+            id,
+          },
+        });
   }
-  getAll({
-    search,
-    limit,
-    page,
-  }: {
-    search?: string;
-    limit?: number;
-    page?: number;
-  }): Promise<Partial<{ id: string }>[]> {
-    throw new Error('Method not implemented.');
+
+  async getAll(params: z.infer<typeof searchPaginationParamsSchema>) {
+      const { limit: take, skip } = pagination(params);
+
+      if (params.search) {
+        params.search = %{params.search.replaceAll(' ', '%%')}%;
+      }
+
+      const where = this.getWhereAll${pascal}(params);
+      return this.prisma.${name}.findMany({
+        take,
+        skip,
+        where,
+      });
+    }
+
+   async countAll${pascal}(params: z.infer<typeof searchPaginationParamsSchema>) {
+      const where = this.getWhereAll${pascal}(params);
+      return await this.prisma.${name}.count({ where });
+    }
+
+     getWhereAll${pascal}(params: z.infer<typeof searchPaginationParamsSchema>) {
+        let where = {};
+        if (params.search) {
+          where = {
+            OR: [
+              {
+                id: {
+                  contains: params.search,
+                  mode: 'insensitive',
+                },
+              }
+            ],
+          };
+        }
+
+        return where;
+      }
+  async getById(id: ${pascal}["id"]) {
+    return this.prisma.${name}.findUnique({
+      omit: {
+        updatedAt: true,
+        deletedAt: true,
+        createdAt: true,
+      },
+      where: { id },
+    });
   }
-  getById(id: string): Promise<{ id: string } | null> {
-    throw new Error('Method not implemented.');
-  }
-  getByEmail(email: string): Promise<{ id: string } | null> {
-    throw new Error('Method not implemented.');
-  }
+
 
 }
 
