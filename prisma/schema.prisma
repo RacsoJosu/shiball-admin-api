@@ -50,7 +50,7 @@ model SeedHistory {
   id           BigInt     @id @default(autoincrement())
   name         String
   status       StatusSeed @default(PENDING)
-  excuteDateAt DateTime
+  excuteDateAt DateTime?
   createdAt    DateTime   @default(now())
   deletedAt    DateTime?
 }
