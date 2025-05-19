@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import prompts from 'prompts';
 import { prisma } from '../server/config/db';
 import dayjs from 'dayjs';
@@ -12,13 +12,11 @@ async function main() {
     validate: (name) =>
       name.trim() !== '' ? true : 'El nombre no puede estar vacío',
   });
-  const seedPath = join(__dirname, '../seed/');
+  const seedPath = join(__dirname, '../seed/seeders');
 
   if (!existsSync(seedPath)) {
     mkdirSync(seedPath, { recursive: true });
   }
-
-  // mkdirSync(basePath, { recursive: true });
 
   const seederName = `${(+new Date()).toString(12)}-${seederNamePrompt.seederName.trim().toLowerCase()}`;
   const basePath = join(__dirname, '../seed/seeders');

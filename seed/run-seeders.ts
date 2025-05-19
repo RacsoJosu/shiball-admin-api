@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { spawnSync } from 'child_process';
 import { join } from 'path';
 import { prisma } from '../server/config/db';
 import { existsSync, mkdirSync, readdirSync } from 'fs';
@@ -29,18 +29,7 @@ class Seeder {
       },
     });
     const seederFullPath = join(seedersPath, `${seedersData[0]?.name}.ts`);
-
-    exec(`pnpm tsx  ${seederFullPath}`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error al ejecutar seeder: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.error(`stderr: ${stderr}`);
-        return;
-      }
-      console.log(`stdout:\n${stdout}`);
-    });
+    spawnSync(`pnpm tsx  ${seederFullPath}`, { shell: false });
   }
 }
 
