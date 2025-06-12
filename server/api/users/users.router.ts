@@ -8,5 +8,10 @@ const userController = container.get<UserController>(TYPES_USER.UserController);
 const router = express.Router();
 
 router.get('/', authGuard, userController.getAllUsers.bind(userController));
+router.get(
+  '/:idUser',
+  authGuard,
+  userController.getUserById.bind(userController)
+);
 
 export default router;

@@ -12,7 +12,7 @@ import { pagination } from '../../shared/libs/helpers';
 import { UserRepository } from './user.repository';
 import { inject, injectable } from 'inversify';
 import TYPES from './user.types';
-import { searchPaginationParamsSchema } from './user.schemas';
+import { idUSerSchema, searchPaginationParamsSchema } from './user.schemas';
 
 @injectable()
 export class UserService {
@@ -20,6 +20,21 @@ export class UserService {
     @inject(TYPES.UserRepository)
     private readonly userRepository: UserRepository
   ) {}
+
+  async getById(params: z.infer<typeof idUSerSchema>) {
+    const user = await this.userRepository.getById(params.idUser);
+    if (!user) {
+      throw new ApiError({
+        title: 'El usuario no existe',
+        details: `El usuario con id ${params.idUser} no esta registrado.`,
+        statusCode: 404,
+        success: false,
+      });
+    }
+
+    const { password, userSecret, ...restData } = user;
+    return restData;
+  }
 
   async login(params: z.infer<typeof loginUserSchema>) {
     const user = await this.userRepository.getByEmail(params.email);

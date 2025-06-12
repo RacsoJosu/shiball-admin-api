@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
-import { searchPaginationParamsSchema } from './user.schemas';
+import { idUSerSchema, searchPaginationParamsSchema } from './user.schemas';
 import { inject, injectable } from 'inversify';
 import TYPES_USER from './user.types';
 
@@ -19,6 +19,16 @@ export class UserController {
     res.status(200).json({
       message: 'Lista de usuarios',
       title: 'Usuarios obtenidos',
+      data,
+    });
+  }
+
+  async getUserById(req: Request, res: Response) {
+    const values = await idUSerSchema.parseAsync(req.params);
+    const data = await this.userService.getById(values);
+    res.status(200).json({
+      title: 'Usuarios obtenido',
+      message: 'Usuario encontrado',
       data,
     });
   }
