@@ -22,7 +22,7 @@ export async function authGuard(
     throw new ApiError({
       statusCode: 401,
       title: 'No autorizado',
-      details: 'Token no encontrado',
+      details: 'Sesión expirada. Vuelve a iniciar sesión.',
       data: req.cookies,
     });
   }
@@ -33,7 +33,7 @@ export async function authGuard(
     throw new ApiError({
       statusCode: 401,
       title: 'No autorizado',
-      details: 'Token no encontrado',
+      details: 'Sesión expirada. Vuelve a iniciar sesión.',
       data: req.cookies,
     });
   }
