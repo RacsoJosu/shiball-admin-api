@@ -28,6 +28,7 @@ export class UserRepository
     return this.prisma.user.update({
       data: {
         ...element,
+        birthDate: dayjs(element.birthDate).toDate(),
         updatedAt: dayjs().toDate(),
       },
       where: {
@@ -99,6 +100,11 @@ export class UserRepository
         firstName: true,
         birthDate: true,
         email: true,
+        Users_Roles: {
+          select: {
+            role: true,
+          },
+        },
       },
       skip,
       take: limit,

@@ -13,6 +13,8 @@ import { UserRepository } from './user.repository';
 import { inject, injectable } from 'inversify';
 import TYPES from './user.types';
 import { idUSerSchema, searchPaginationParamsSchema } from './user.schemas';
+import { updateUserInput } from './dto/input-update.user.dto';
+import dayjs from 'dayjs';
 
 @injectable()
 export class UserService {
@@ -34,6 +36,26 @@ export class UserService {
 
     const { password, userSecret, ...restData } = user;
     return restData;
+  }
+
+  async updateUser(
+    params: z.infer<typeof idUSerSchema>,
+    body: z.infer<typeof updateUserInput>
+  ) {
+    const user = await this.userRepository.getById(params.idUser);
+    if (!user) {
+      throw new ApiError({
+        title: 'El usuario no existe',
+        details: `El usuario con id ${params.idUser} no esta registrado.`,
+        statusCode: 404,
+        success: false,
+      });
+    }
+
+    return this.userRepository.update(params.idUser, {
+      ...body,
+      birthDate: body.birthDate ?? dayjs(user.birthDate).format('YYYY-MM-DD'),
+    });
   }
 
   async login(params: z.infer<typeof loginUserSchema>) {

@@ -1,4 +1,3 @@
+import { registerUserSchema } from '../../auth/auth.schemas';
 
-import { createUserSquemaRepository } from "../../auth/auth.schemas";
-
-export const updateUserInput =  createUserSquemaRepository.optional()
+export const updateUserInput = registerUserSchema.partial();

@@ -14,4 +14,10 @@ router.get(
   userController.getUserById.bind(userController)
 );
 
+router.patch(
+  '/:idUser',
+  authGuard,
+  userController.patchUser.bind(userController)
+);
+
 export default router;
