@@ -26,6 +26,10 @@ model User {
   updatedAt   DateTime      @updatedAt
   deletedAt   DateTime?
   Users_Roles Users_Roles[]
+
+  UserProperties        Properties[]  @relation("UserProperties")
+  UserCreatedProperties Properties[]  @relation("UserCreatedProperties")
+  Reservation           Reservation[]
 }
 
 model Role {
@@ -59,4 +63,140 @@ enum StatusSeed {
   PENDING
   COMPLETED
   FAILED
+}
+
+model Properties {
+  id          String        @id @default(uuid())
+  description String
+  capacity    Int?          @default(1)
+  fkIdUSer    String
+  createdById String?
+  type        TypePropertie @default(DWELLING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime?     @updatedAt
+  deletedAt   DateTime?
+
+  user          User  @relation("UserProperties", fields: [fkIdUSer], references: [id])
+  createdByUser User? @relation("UserCreatedProperties", fields: [createdById], references: [id])
+
+  Vehicles     Vehicles?
+  Dwelling     Dwelling?
+  PropertyRate PropertyRate[]
+}
+
+model Vehicles {
+  id          BigInt       @id @default(autoincrement())
+  description String
+  brand       String
+  model       String
+  type        TypeVehicles @default(MECHANICAL)
+  propertieId String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime?    @updatedAt
+  deletedAt   DateTime?
+
+  propiertie Properties @relation(fields: [propertieId], references: [id])
+}
+
+model Dwelling {
+  id          BigInt    @id @default(autoincrement())
+  city        String
+  county      String
+  address     String
+  latitude    Decimal
+  longitude   Decimal
+  propertieId String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  deletedAt   DateTime?
+
+  propiertie Properties @relation(fields: [propertieId], references: [id])
+}
+
+model Service {
+  id          Int       @id
+  name        String
+  description String
+  isFree      Boolean   @map("is_free")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  createdBy   String    @map("created_by")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  serviceRates ServiceRate[]
+}
+
+enum RateType {
+  hour
+  day
+  month
+  quarter
+  semester
+  year
+}
+
+model Rate {
+  id        Int       @id
+  type      RateType
+  price     Decimal
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String    @map("created_by")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  propertyRates PropertyRate[]
+  serviceRates  ServiceRate[]
+}
+
+model PropertyRate {
+  id         Int       @id
+  propertyId String    @map("fk_id_property")
+  rateId     Int       @map("fk_id_rate")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  createdBy  String    @map("created_by")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  property Properties @relation(fields: [propertyId], references: [id])
+  rate     Rate       @relation(fields: [rateId], references: [id])
+
+  reservations Reservation[]
+}
+
+model ServiceRate {
+  id        Int       @id
+  serviceId Int       @map("fk_id_service")
+  rateId    Int       @map("fk_id_rate")
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String    @map("created_by")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  service Service @relation(fields: [serviceId], references: [id])
+  rate    Rate    @relation(fields: [rateId], references: [id])
+}
+
+model Reservation {
+  id             Int       @id
+  userId         String    @map("fk_id_user")
+  propertyRateId Int       @map("fk_id_property_rate")
+  startDate      DateTime  @map("start_date")
+  endDate        DateTime  @map("end_date")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  createdBy      String    @map("created_by")
+  updatedAt      DateTime? @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  user         User         @relation(fields: [userId], references: [id])
+  propertyRate PropertyRate @relation(fields: [propertyRateId], references: [id])
+}
+
+enum TypeVehicles {
+  MECHANICAL
+  AUTOMATIC
+}
+
+enum TypePropertie {
+  VEHICLE
+  DWELLING
 }
