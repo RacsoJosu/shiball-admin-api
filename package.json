@@ -18,11 +18,9 @@
     "db:generate": "pnpm exec prisma generate --no-engine --schema=./prisma/schema.prisma",
     "db:push": "pnpm exec prisma db push",
     "script": "tsx ./seeders/seed-runner.ts",
-    "module":"tsx ./scripts/create-modules.ts",
-    "seeder:run":"tsx ./seed/run-seeders.ts",
-
-    "seeder:create":"tsx ./scripts/create-seeder.ts",
-
+    "module": "tsx ./scripts/create-modules.ts",
+    "seeder:run": "tsx ./seed/run-seeders.ts",
+    "seeder:create": "tsx ./scripts/create-seeder.ts",
     "postinstall": "pnpm exec prisma generate --schema=./prisma/schema.prisma"
   },
   "keywords": [],
@@ -63,6 +61,7 @@
     "typescript-eslint": "^8.22.0"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.8.0",
     "@prisma/client": "^6.3.1",
     "@vercel/node": "^2.3.0",
     "bcryptjs": "^2.4.3",

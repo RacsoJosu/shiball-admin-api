@@ -114,7 +114,7 @@ model Dwelling {
 }
 
 model Service {
-  id          Int       @id
+  id          Int       @id @default(autoincrement())
   name        String
   description String
   isFree      Boolean   @map("is_free")
@@ -136,7 +136,7 @@ enum RateType {
 }
 
 model Rate {
-  id        Int       @id
+  id        Int       @id @default(autoincrement())
   type      RateType
   price     Decimal
   createdAt DateTime  @default(now()) @map("created_at")
@@ -149,7 +149,7 @@ model Rate {
 }
 
 model PropertyRate {
-  id         Int       @id
+  id         Int       @id @default(autoincrement())
   propertyId String    @map("fk_id_property")
   rateId     Int       @map("fk_id_rate")
   createdAt  DateTime  @default(now()) @map("created_at")
@@ -164,7 +164,7 @@ model PropertyRate {
 }
 
 model ServiceRate {
-  id        Int       @id
+  id        Int       @id @default(autoincrement())
   serviceId Int       @map("fk_id_service")
   rateId    Int       @map("fk_id_rate")
   createdAt DateTime  @default(now()) @map("created_at")
@@ -177,7 +177,7 @@ model ServiceRate {
 }
 
 model Reservation {
-  id             Int       @id
+  id             Int       @id @default(autoincrement())
   userId         String    @map("fk_id_user")
   propertyRateId Int       @map("fk_id_property_rate")
   startDate      DateTime  @map("start_date")
