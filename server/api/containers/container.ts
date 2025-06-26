@@ -7,6 +7,7 @@ import { prisma } from '../../config/db';
 import { bindSeedModule } from './bindings/seed.binding';
 import { bindAllModule } from './bindings/all-bindings';
 import TYPES_COMMON from '../../types/common.types';
+import { bindPropertiesModule } from './bindings/properties.bindings';
 
 const container = new Container();
 
@@ -19,5 +20,6 @@ container
 bindUserModule(container);
 bindAuthModule(container);
 bindSeedModule(container);
+bindPropertiesModule(container);
 
 export default container;
