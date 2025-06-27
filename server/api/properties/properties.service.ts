@@ -8,12 +8,11 @@ import TYPES_PROPERTIES from './properties.types';
 import { inject, injectable } from 'inversify';
 @injectable()
 export class PropertiesService {
-constructor(
+  constructor(
     @inject(TYPES_PROPERTIES.PropertiesRepository)
     private readonly propertiesRepository: PropertiesRepository
   ) {}
-  async findAll() {
-    // Implementación aquí
-    return [];
+  async findAll(params: { limit: number; page: number; search?: string }) {
+    return this.propertiesRepository.getAll(params);
   }
 }

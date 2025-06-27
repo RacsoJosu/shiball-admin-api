@@ -11,12 +11,13 @@ import { searchPaginationParamsSchema } from '../../shared/schemas';
 import dayjs from 'dayjs';
 
 type PropertiesDTO = z.infer<typeof inputPropertiesCreateSchema>;
+
 type PropertiesUpdateInput = Partial<PropertiesDTO>;
 @injectable()
 export class PropertiesRepository
   implements
     IWrite<Properties, PropertiesDTO, Properties['id']>,
-    IRead<PropertiesDTO, Properties['id']>
+    IRead<Partial<Properties>, Properties['id']>
 {
   constructor(
     @inject(TYPES_COMMON.databaseConnection)
@@ -65,18 +66,56 @@ export class PropertiesRepository
     }
 
     const where = this.getWhereAllProperties(params);
-    return this.prisma.properties.findMany({
-      select: {
-        id: true,
-        capacity: true,
-        description: true,
-        fkIdUSer: true,
-        type: true,
-      },
-      take,
-      skip,
-      where,
-    });
+    const data = await Promise.all([
+      this.prisma.properties.findMany({
+        select: {
+          id: true,
+          fkIdUSer: true,
+          capacity: true,
+          description: true,
+          type: true,
+          Dwelling: {
+            select: {
+              id: true,
+              city: true,
+              county: true,
+              address: true,
+              latitude: true,
+              longitude: true,
+            },
+          },
+        },
+        take,
+        skip,
+        where: {
+          ...where,
+          Dwelling: {
+            NOT: {},
+          },
+        },
+      }),
+      this.prisma.properties.findMany({
+        select: {
+          id: true,
+          fkIdUSer: true,
+          capacity: true,
+          description: true,
+          type: true,
+          Vehicles: {
+            select: {
+              id: true,
+              description: true,
+              brand: true,
+              model: true,
+            },
+          },
+        },
+        take,
+        skip,
+        where: { ...where, Vehicles: {} },
+      }),
+    ]);
+    return data.flat();
   }
 
   async countAllProperties(

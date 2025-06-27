@@ -12,4 +12,11 @@ declare global {
       user?: UserContext; // Añades la propiedad 'user' que puede ser un UserPayload
     }
   }
+  interface BigInt {
+    toJSON(): string;
+  }
 }
+
+BigInt.prototype.toJSON = function () {
+  return String(this);
+};
