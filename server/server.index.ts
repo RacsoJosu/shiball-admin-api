@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import './types/express.d.ts';
+import './types/bigint-json';
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';

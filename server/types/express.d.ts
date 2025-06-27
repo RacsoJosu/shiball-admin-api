@@ -16,7 +16,3 @@ declare global {
     toJSON(): string;
   }
 }
-
-BigInt.prototype.toJSON = function () {
-  return String(this);
-};
