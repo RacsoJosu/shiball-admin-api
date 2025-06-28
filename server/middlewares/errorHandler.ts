@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { ApiError } from './statusCode';
 import { JsonWebTokenError } from 'jsonwebtoken';
+import logger from '../logger/config';
 
 export function errorHandler(
   err: Error,
@@ -18,16 +19,20 @@ export function errorHandler(
       data: err.format(),
     });
 
+    logger.warn(`[ZOD ERROR] ${req.method} ${req.url}`);
+
     res.status(response.statusCode).json(response.getResponse());
     return;
   }
 
   if (err instanceof ApiError) {
+    logger.warn(`[API ERROR] ${err.title} → ${req.method} ${req.url}`);
     res.status(err.statusCode).json(err.getResponse());
     return;
   }
 
   if (err instanceof JsonWebTokenError) {
+    logger.error(`[JWT ERROR] ${req.method} ${req.url}: ${err.message}`, err);
     const response = new ApiError({
       title: 'Unathorized',
       details: err.message,
@@ -47,6 +52,8 @@ export function errorHandler(
     title: 'Error de Servidor',
     details: `Ha ocurrido un error en el endpoint ${req.method} ${req.url}`,
   });
+
+  logger.error(`[UNHANDLED ERROR] ${req.method} ${req.url}`, err);
 
   console.log(err);
 

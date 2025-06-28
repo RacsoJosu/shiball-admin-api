@@ -9,6 +9,7 @@ interface UserContext {
 declare global {
   namespace Express {
     interface Request {
+      traceId?: string;
       user?: UserContext; // Añades la propiedad 'user' que puede ser un UserPayload
     }
   }
