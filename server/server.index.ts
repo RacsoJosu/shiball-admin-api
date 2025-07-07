@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import './types/bigint-json';
-import express, { Express, NextFunction, Request, Response } from 'express';
+
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
@@ -11,10 +12,20 @@ import { prismaConnect } from '../server/config/db';
 import { errorHandler } from '../server/middlewares/errorHandler';
 import { getRouter } from '../server/api/router';
 import logger from './logger/config';
-morgan.token('traceId', (req: Request) => req.traceId ?? 'NoTrace');
-morgan.token('userId', (req: Request) => req.user?.id ?? 'Anonymous');
-morgan.token('remote-addr', (req: Request) => req.ip ?? 'NoIP');
+import { VercelRequest, VercelResponse } from '@vercel/node';
+import { IncomingMessage } from 'http';
 
+morgan.token('traceId', (req: IncomingMessage & { traceId?: string }) => {
+  return req.traceId ?? 'NoTrace';
+});
+
+morgan.token('userId', (req: IncomingMessage & { user?: { id: string } }) => {
+  return req.user?.id ?? 'Anonymous';
+});
+
+morgan.token('remote-addr', (req: IncomingMessage & { ip?: string }) => {
+  return req.ip ?? 'NoIP';
+});
 dotenv.config();
 const customFormat = function (
   tokens: Record<any, any>,
@@ -49,7 +60,7 @@ const customFormat = function (
 
   return `[${colors.bgBlue(method)}] ${colors.gray(url)} ${statusColor(status)} - ${responseTime} ms - userId: ${userId} - traceId: ${traceId} - ip: ${colors.rainbow(ip)}`;
 };
-const app: Express = express();
+const app = express();
 
 const PORT = process.env.PORT ?? 3001;
 app.use(
@@ -101,4 +112,6 @@ app.listen(PORT, () => {
     `[${colors.green('SERVER RUNNING')}] en el puerto ${colors.bgYellow(PORT.toString())}`
   );
 });
-export default app;
+export default (req: VercelRequest, res: VercelResponse) => {
+  app(req, res);
+};

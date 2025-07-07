@@ -31,8 +31,10 @@
     "noImplicitOverride": true /* Ensure overriding members in derived classes are marked with an override modifier. */,
 
     /* Completeness */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+
+    "moduleResolution": "nodenext"
   },
-  "include": ["**/*"],
+  "include": ["**/*.ts", "**/*.d.ts", "types"],
   "exclude": ["dist"]
 }
