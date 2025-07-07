@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "packageManager": "pnpm@8.15.5",
-  "type": "commonjs",
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"pnpm run watch-compile\" \"pnpm run watch-dev\"",
