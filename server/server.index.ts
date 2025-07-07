@@ -5,6 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import colors from 'colors';
 import { v4 as uuidv4 } from 'uuid';
 import { prismaConnect } from '../server/config/db';
 import { errorHandler } from '../server/middlewares/errorHandler';
@@ -40,7 +41,13 @@ const customFormat = function (
       ? tokens['remote-addr'](req, res)
       : '';
 
-  return `[${date}] info: [${method}] ${url} ${status} - ${responseTime} ms - userId: ${userId} - traceId: ${traceId} - ip: ${ip}`;
+  let statusColor = colors.gray;
+  if (status.startsWith('2')) statusColor = colors.green;
+  else if (status.startsWith('3')) statusColor = colors.cyan;
+  else if (status.startsWith('4')) statusColor = colors.yellow;
+  else if (status.startsWith('5')) statusColor = colors.red;
+
+  return `[${colors.bgBlue(method)}] ${colors.gray(url)} ${statusColor(status)} - ${responseTime} ms - userId: ${userId} - traceId: ${traceId} - ip: ${colors.rainbow(ip)}`;
 };
 const app: Express = express();
 
@@ -90,6 +97,8 @@ app.use(errorHandler);
   await prismaConnect();
 })();
 app.listen(PORT, () => {
-  logger.info(`[SERVER RUNNING] en el puerto ${PORT}`);
+  logger.info(
+    `[${colors.green('SERVER RUNNING')}] en el puerto ${colors.bgYellow(PORT.toString())}`
+  );
 });
 export default app;

@@ -1,21 +1,21 @@
 CREATE TABLE "users" (
   "id" integer PRIMARY KEY,
-  "first_name" varchar,
-  "last_name" varchar,
+  "first_name" varchar(255),
+  "last_name" varchar(255),
   "birthday_date" date,
   "fk_id_role" integer,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
 
 CREATE TABLE "roles" (
   "id" integer PRIMARY KEY,
-  "name" varchar,
+  "name" varchar(255),
   "description" text,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
@@ -24,70 +24,70 @@ CREATE TABLE "users_roles" (
   "fk_id_users" integer,
   "fk_id_roles" integer,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
 
 CREATE TABLE "seed_history" (
   "id" integer PRIMARY KEY,
-  "name" varchar,
-  "status" varchar,
+  "name" varchar(255),
+  "status" varchar(255),
   "execute_date" timestamp,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
 
 CREATE TABLE "properties" (
   "id" integer PRIMARY KEY,
-  "name" varchar,
+  "name" varchar(255),
   "description" text,
   "capacity" integer,
   "type" enum(vehicle,house),
   "fk_id_user" integer,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
 
 CREATE TABLE "vehicles" (
   "id" integer PRIMARY KEY,
-  "license_plate" varchar,
-  "brand" varchar,
-  "model" varchar,
+  "license_plate" varchar(255),
+  "brand" varchar(255),
+  "model" varchar(255),
   "year" integer,
   "type" enum(hybrid,non-hybrid),
   "fk_id_property" integer,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
 
 CREATE TABLE "houses" (
   "id" integer PRIMARY KEY,
-  "city" varchar,
-  "country" varchar,
-  "address" varchar,
+  "city" varchar(255),
+  "country" varchar(255),
+  "address" varchar(255),
   "latitude" decimal,
   "longitude" decimal,
   "fk_id_property" integer,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
 
 CREATE TABLE "services" (
   "id" integer PRIMARY KEY,
-  "name" varchar,
+  "name" varchar(255),
   "description" text,
   "is_free" boolean,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
@@ -97,7 +97,7 @@ CREATE TABLE "rates" (
   "type" enum(hour,day,month,quarter,semester,year),
   "price" decimal,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
@@ -107,7 +107,7 @@ CREATE TABLE "property_rates" (
   "fk_id_property" integer,
   "fk_id_rate" integer,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
@@ -117,7 +117,7 @@ CREATE TABLE "service_rates" (
   "fk_id_service" integer,
   "fk_id_rate" integer,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );
@@ -129,7 +129,7 @@ CREATE TABLE "reservations" (
   "start_date" timestamp,
   "end_date" timestamp,
   "created_at" timestamp,
-  "created_by" varchar,
+  "created_by" varchar(255),
   "updated_at" timestamp,
   "deleted_at" timestamp
 );

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "packageManager": "pnpm@8.15.5",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"pnpm run watch-compile\" \"pnpm run watch-dev\"",
@@ -13,7 +14,7 @@
     "watch-compile": "swc server -w --config-file .swcrc --out-dir dist",
     "watch-dev": "nodemon --watch ./server --exec tsx ./server/server.index.ts",
     "build": "pnpm exec prisma generate --no-engine --schema=./prisma/schema.prisma && tsc --noEmit && swc server -d dist",
-    "start": "node ./dist/server.index.js",
+    "start": "tsx ./dist/server/server.index.js",
     "db:migrate": "cross-env name=$npm_config_name pnpm exec prisma migrate dev --name $name --create-only",
     "db:generate": "pnpm exec prisma generate --no-engine --schema=./prisma/schema.prisma",
     "db:push": "pnpm exec prisma db push",

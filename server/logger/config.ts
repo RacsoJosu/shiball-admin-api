@@ -3,7 +3,7 @@ import 'winston-daily-rotate-file';
 import fs from 'fs';
 import path from 'path';
 import dayjs from 'dayjs';
-
+import colors from 'colors';
 // Obtener fecha actual formateada
 const now = dayjs();
 const year = now.format('YYYY'); // "2025"
@@ -30,31 +30,35 @@ const logLevels = {
   trace: 5,
 };
 const logger = winston.createLogger({
-  level: 'error',
+  level: 'info',
   levels: logLevels,
   format: winston.format.combine(
     winston.format.errors({ stack: true }),
-    winston.format.colorize({ all: true }),
 
-    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-
-    winston.format.json()
+    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' })
   ),
   transports: [
     new winston.transports.Console({
       level: 'info',
       format: winston.format.combine(
-        winston.format.colorize(),
         winston.format.simple(),
         winston.format.timestamp({
           format: 'YYYY-MM-DD hh:mm:ss.SSS A',
         }),
+
         winston.format.printf(
-          (info) => `[${info.timestamp}] ${info.level}: ${info.message}`
+          (info) =>
+            `[${colors.magenta(`${info.timestamp}`)}] ${info.level}: ${info.message}`
         )
       ),
     }),
-    fileRotateTransport,
+    new winston.transports.DailyRotateFile({
+      filename: logFilePath,
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '14d',
+      level: 'error',
+      format: winston.format.json(),
+    }),
   ],
 });
 

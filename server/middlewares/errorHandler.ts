@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { ApiError } from './statusCode';
-import { JsonWebTokenError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import logger from '../logger/config';
 
 export function errorHandler(
@@ -31,7 +31,7 @@ export function errorHandler(
     return;
   }
 
-  if (err instanceof JsonWebTokenError) {
+  if (err instanceof jwt.JsonWebTokenError) {
     logger.error(`[JWT ERROR] ${req.method} ${req.url}: ${err.message}`, err);
     const response = new ApiError({
       title: 'Unathorized',
