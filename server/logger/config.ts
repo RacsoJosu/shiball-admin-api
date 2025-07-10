@@ -1,7 +1,7 @@
 import winston from 'winston';
 import 'winston-daily-rotate-file';
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
 import dayjs from 'dayjs';
 import colors from 'colors';
 // Obtener fecha actual formateada
@@ -11,16 +11,16 @@ const month = now.format('MM'); // "06"
 const day = now.format('DD'); // "26"
 
 // Construir rutas
-const logsDir = path.join('logs', 'errors', year, month);
-const logFilePath = path.join(logsDir, `${day}.log`);
+// const logsDir = path.join('logs', 'errors', year, month);
+// const logFilePath = path.join(logsDir, `${day}.log`);
 
 // Asegurar que las carpetas existen
-fs.mkdirSync(logsDir, { recursive: true });
-const fileRotateTransport = new winston.transports.DailyRotateFile({
-  filename: logFilePath,
-  datePattern: 'YYYY-MM-DD',
-  maxFiles: '14d',
-});
+// fs.mkdirSync(logsDir, { recursive: true });
+// const fileRotateTransport = new winston.transports.DailyRotateFile({
+//   filename: logFilePath,
+//   datePattern: 'YYYY-MM-DD',
+//   maxFiles: '14d',
+// });
 const logLevels = {
   fatal: 0,
   error: 1,
@@ -52,13 +52,13 @@ const logger = winston.createLogger({
         )
       ),
     }),
-    new winston.transports.DailyRotateFile({
-      filename: logFilePath,
-      datePattern: 'YYYY-MM-DD',
-      maxFiles: '14d',
-      level: 'error',
-      format: winston.format.json(),
-    }),
+    // new winston.transports.DailyRotateFile({
+    //   filename: logFilePath,
+    //   datePattern: 'YYYY-MM-DD',
+    //   maxFiles: '14d',
+    //   level: 'error',
+    //   format: winston.format.json(),
+    // }),
   ],
 });
 
