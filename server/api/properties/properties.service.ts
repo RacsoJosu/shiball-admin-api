@@ -13,6 +13,17 @@ export class PropertiesService {
     private readonly propertiesRepository: PropertiesRepository
   ) {}
   async findAll(params: { limit: number; page: number; search?: string }) {
-    return this.propertiesRepository.getAll(params);
+    const [properties, total] = await Promise.all([
+      this.propertiesRepository.getAll(params),
+      this.propertiesRepository.countAllProperties(params),
+    ]);
+    const { limit, page } = pagination(params);
+
+    return {
+      properties,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 }

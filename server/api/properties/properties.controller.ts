@@ -25,18 +25,9 @@ export class PropertiesController {
       search: values.search,
     });
 
-    if (data.length === 0) {
-      res.status(200).json({
-        message: 'Lista de usuarios vacia',
-        title: 'No hay usuarios',
-        data: data,
-      });
-      return;
-    }
-
     res.status(200).json({
-      message: 'Lista de usuarios',
-      title: 'Usuarios obtenidos',
+      message: 'Lista de propiedades',
+      title: 'Propiedades obtenidas',
       data: data,
     });
   }

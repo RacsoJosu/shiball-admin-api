@@ -14,13 +14,17 @@ export class RoleController {
   }
 
   async getAllRole(req: Request, res: Response) {
-    // implementar get All
+    const values = await searchPaginationParamsSchema.parseAsync(req.query);
+    const roles = await this.roleService.findAll({
+      limit: values.limit,
+      page: values.page,
+      search: values.search,
+    });
 
     res.status(200).json({
-      message: 'Lista de usuarios',
-      title: 'Usuarios obtenidos',
-      data:null,
+      message: 'Lista de roles',
+      title: 'Roles obtenidos',
+      data: roles,
     });
   }
 }
-

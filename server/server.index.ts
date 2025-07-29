@@ -53,10 +53,10 @@ const customFormat = function (
       : '';
 
   let statusColor = colors.gray;
-  if (status.startsWith('2')) statusColor = colors.green;
-  else if (status.startsWith('3')) statusColor = colors.cyan;
-  else if (status.startsWith('4')) statusColor = colors.yellow;
-  else if (status.startsWith('5')) statusColor = colors.red;
+  if (status?.startsWith('2')) statusColor = colors.green;
+  else if (status?.startsWith('3')) statusColor = colors.cyan;
+  else if (status?.startsWith('4')) statusColor = colors.yellow;
+  else if (status?.startsWith('5')) statusColor = colors.red;
 
   return `[${colors.bgBlue(method)}] ${colors.gray(url)} ${statusColor(status)} - ${responseTime} ms - userId: ${userId} - traceId: ${traceId} - ip: ${colors.rainbow(ip)}`;
 };

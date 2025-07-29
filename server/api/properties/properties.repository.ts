@@ -66,7 +66,7 @@ export class PropertiesRepository
     }
 
     const where = this.getWhereAllProperties(params);
-    const data = await Promise.all([
+    const [dwellings, vehicles] = await Promise.all([
       this.prisma.properties.findMany({
         select: {
           id: true,
@@ -89,9 +89,7 @@ export class PropertiesRepository
         skip,
         where: {
           ...where,
-          Dwelling: {
-            NOT: {},
-          },
+          Dwelling: {},
         },
       }),
       this.prisma.properties.findMany({
@@ -115,7 +113,14 @@ export class PropertiesRepository
         where: { ...where, Vehicles: {} },
       }),
     ]);
-    return data.flat();
+
+    const unified = [
+      ...dwellings.map((d) => ({ ...d, details: d.Dwelling })),
+      ...vehicles.map((v) => ({ ...v, details: v.Vehicles })),
+    ];
+
+    const dataPaginated = unified.slice(skip, skip + take);
+    return dataPaginated;
   }
 
   async countAllProperties(

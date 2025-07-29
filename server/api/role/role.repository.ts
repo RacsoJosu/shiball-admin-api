@@ -1,5 +1,3 @@
-// role.repository.ts
-
 import z from 'zod';
 import { PrismaClient, Role } from '@prisma/client';
 import { injectable, inject } from 'inversify';
@@ -9,8 +7,8 @@ import { IRead, IWrite } from '../../shared/interfaces';
 import { pagination } from '../../shared/libs/helpers';
 import { searchPaginationParamsSchema } from '../../shared/schemas';
 import dayjs from 'dayjs';
-type RoleDTO = z.infer<typeof inputRoleCreateSchema>;
-type RoleUpdateInput = Partial<RoleDTO>;
+interface RoleDTO extends z.infer<typeof inputRoleCreateSchema> {}
+interface RoleUpdateInput extends Partial<RoleDTO> {}
 @injectable()
 export class RoleRepository
   implements IWrite<Role, RoleDTO, Role['id']>, IRead<RoleDTO, Role['id']>
