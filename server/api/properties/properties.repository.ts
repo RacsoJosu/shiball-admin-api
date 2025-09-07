@@ -62,65 +62,40 @@ export class PropertiesRepository
     const { limit: take, skip } = pagination(params);
 
     if (params.search) {
-      params.search = `%${params.search.replaceAll(' ', '%%')}`;
+      params.search = `%${params.search.replaceAll(' ', '%%')}%`;
     }
 
     const where = this.getWhereAllProperties(params);
-    const [dwellings, vehicles] = await Promise.all([
-      this.prisma.properties.findMany({
-        select: {
-          id: true,
-          fkIdUSer: true,
-          capacity: true,
-          description: true,
-          type: true,
-          Dwelling: {
-            select: {
-              id: true,
-              city: true,
-              county: true,
-              address: true,
-              latitude: true,
-              longitude: true,
-            },
+    return this.prisma.properties.findMany({
+      select: {
+        id: true,
+        fkIdUSer: true,
+        capacity: true,
+        description: true,
+        type: true,
+        Vehicles: {
+          select: {
+            id: true,
+            description: true,
+            brand: true,
+            model: true,
           },
         },
-        take,
-        skip,
-        where: {
-          ...where,
-          Dwelling: {},
-        },
-      }),
-      this.prisma.properties.findMany({
-        select: {
-          id: true,
-          fkIdUSer: true,
-          capacity: true,
-          description: true,
-          type: true,
-          Vehicles: {
-            select: {
-              id: true,
-              description: true,
-              brand: true,
-              model: true,
-            },
+        Dwelling: {
+          select: {
+            id: true,
+            city: true,
+            county: true,
+            address: true,
+            latitude: true,
+            longitude: true,
           },
         },
-        take,
-        skip,
-        where: { ...where, Vehicles: {} },
-      }),
-    ]);
-
-    const unified = [
-      ...dwellings.map((d) => ({ ...d, details: d.Dwelling })),
-      ...vehicles.map((v) => ({ ...v, details: v.Vehicles })),
-    ];
-
-    const dataPaginated = unified.slice(skip, skip + take);
-    return dataPaginated;
+      },
+      take,
+      skip,
+      where,
+    });
   }
 
   async countAllProperties(
@@ -137,6 +112,12 @@ export class PropertiesRepository
         OR: [
           {
             id: {
+              contains: params.search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            description: {
               contains: params.search,
               mode: 'insensitive',
             },

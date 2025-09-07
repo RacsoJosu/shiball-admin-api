@@ -1,7 +1,5 @@
 // properties.service.ts
-import z from 'zod';
-import { Properties } from '@prisma/client';
-import { ApiError } from '../../middlewares/statusCode';
+
 import { pagination } from '../../shared/libs/helpers';
 import { PropertiesRepository } from './properties.repository';
 import TYPES_PROPERTIES from './properties.types';
