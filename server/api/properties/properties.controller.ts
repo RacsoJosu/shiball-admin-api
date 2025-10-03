@@ -4,6 +4,7 @@ import { PropertiesService } from './properties.service';
 import { searchPaginationParamsSchema } from '../../shared/schemas';
 import { inject, injectable } from 'inversify';
 import TYPES_PROPERTIES from './properties.types';
+import { propertySchema } from './properties.schemas';
 
 @injectable()
 export class PropertiesController {
@@ -29,6 +30,17 @@ export class PropertiesController {
       message: 'Lista de propiedades',
       title: 'Propiedades obtenidas',
       data: data,
+    });
+  }
+
+  async addPropertie(req: Request, res: Response) {
+    const values = await propertySchema.parseAsync(req.body);
+
+    await this.propertiesService.add(values);
+    res.status(200).json({
+      message: 'Propiedad agregada',
+      title: 'Propiedad agregada',
+      data: null,
     });
   }
 }

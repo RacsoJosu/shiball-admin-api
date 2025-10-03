@@ -15,4 +15,6 @@ router.get(
   propertiesController.getAllProperties.bind(propertiesController)
 );
 
+router.post('/', propertiesController.addPropertie.bind(propertiesController));
+
 export default router;

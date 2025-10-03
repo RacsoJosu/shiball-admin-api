@@ -1,10 +1,13 @@
 // properties.repository.ts
 
 import z from 'zod';
-import { PrismaClient, Properties } from '@prisma/client';
+import { Prisma, PrismaClient, Properties, TypeVehicles } from '@prisma/client';
 import { injectable, inject } from 'inversify';
 import TYPES_COMMON from '../../types/common.types';
-import { inputPropertiesCreateSchema } from './properties.schemas';
+import {
+  inputPropertiesCreateSchema,
+  propertySchema,
+} from './properties.schemas';
 import { IRead, IWrite } from '../../shared/interfaces';
 import { pagination } from '../../shared/libs/helpers';
 import { searchPaginationParamsSchema } from '../../shared/schemas';
@@ -24,15 +27,70 @@ export class PropertiesRepository
     private readonly prisma: PrismaClient
   ) {}
 
-  async create(element: PropertiesDTO): Promise<Properties | null> {
-    return this.prisma.properties.create({
-      data: {
-        ...element,
-        createdAt: dayjs().toDate(),
-        updatedAt: dayjs().toDate(),
-      },
-    });
+  async create(
+    element: z.infer<typeof propertySchema> & { fkIdUSer: string }
+  ): Promise<Properties | null> {
+    const now = dayjs().toDate();
+
+    if (element.type === 'DWELLING') {
+      const {
+        city,
+        country,
+        address,
+        latitude,
+        longitude,
+
+        fkIdUSer,
+        type,
+        ...base
+      } = element;
+
+      return this.prisma.properties.create({
+        data: {
+          ...base,
+          type,
+          fkIdUSer: element.fkIdUSer,
+          createdAt: now,
+          updatedAt: now,
+          Dwelling: {
+            create: {
+              city,
+              county: country,
+              address,
+              latitude: new Prisma.Decimal(latitude),
+              longitude: new Prisma.Decimal(longitude),
+            },
+          },
+        },
+      });
+    }
+
+    if (element.type === 'VEHICLE') {
+      const { brand, model, typeVehicle, type, ...base } = element;
+
+      return this.prisma.properties.create({
+        data: {
+          ...base,
+          type,
+          fkIdUSer: element.fkIdUSer,
+          createdAt: now,
+          updatedAt: now,
+          Vehicles: {
+            create: {
+              description: base.description,
+              brand,
+              model,
+              type: typeVehicle as TypeVehicles,
+            },
+          },
+        },
+      });
+    }
+
+    // opcional: lanzar error si type no es válido
+    throw new Error('Tipo de propiedad inválido');
   }
+
   async update(
     id: Properties['id'],
     element: PropertiesUpdateInput

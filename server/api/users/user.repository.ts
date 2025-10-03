@@ -159,4 +159,13 @@ export class UserRepository
       },
     });
   }
+
+  async getRandomUser() {
+    const count = await this.prisma.user.count();
+    const randomIndex = Math.floor(Math.random() * count);
+
+    return this.prisma.user.findFirstOrThrow({
+      skip: randomIndex,
+    });
+  }
 }
