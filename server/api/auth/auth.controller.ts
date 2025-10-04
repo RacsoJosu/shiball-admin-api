@@ -16,7 +16,14 @@ export class AuthController {
   async postResgisterUser(req: Request, res: Response) {
     const values = registerUserSchema.parse(req.body);
     const userRegistered = await this.userService.addUser(values);
-
+    const { token } = await this.userService.login(values);
+    res.cookie('AUTH_TOKEN', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      path: '/',
+      maxAge: 604800000,
+    });
     res.status(201).send({
       message: 'Usuario creado',
       title: 'Usuario registrado',
