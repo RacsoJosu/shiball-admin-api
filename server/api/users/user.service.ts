@@ -14,7 +14,8 @@ import { inject, injectable } from 'inversify';
 import TYPES from './user.types';
 import { idUSerSchema, searchPaginationParamsSchema } from './user.schemas';
 import { updateUserInput } from './dto/input-update.user.dto';
-import dayjs from 'dayjs';
+import dayjs from '../../shared/libs/dayjs-wrapper';
+import { DEFAULT_FORMAT_DATE } from '../../shared/const';
 
 @injectable()
 export class UserService {
@@ -177,6 +178,21 @@ export class UserService {
     };
   }
 
+  async getStatsUsers() {
+    const [total, totalThisMonth] = await Promise.all([
+      this.userRepository.getTotalUsers({}),
+      this.userRepository.getTotalUsers({
+        dateFilter: dayjs().format(DEFAULT_FORMAT_DATE),
+      }),
+    ]);
+
+    return {
+      title: 'Usuarios registrados',
+      total,
+      totalThisMonth,
+      icon: 'user',
+    };
+  }
   async getInfoAuthUser(params: { email: string; token?: string }) {
     const user = await this.userRepository.getByEmail(params.email);
 

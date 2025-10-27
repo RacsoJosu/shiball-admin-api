@@ -27,6 +27,24 @@ export class PropertiesRepository
     private readonly prisma: PrismaClient
   ) {}
 
+  async getTotalProperty({ dateFilter }: { dateFilter?: string }) {
+    let where = {};
+    if (dateFilter) {
+      where = {
+        createdAt: {
+          gte: dayjs(dateFilter).startOf('month').toDate(),
+        },
+      };
+    }
+    return this.prisma.properties.count({
+      where: {
+        AND: {
+          ...where,
+          deletedAt: null,
+        },
+      },
+    });
+  }
   async create(
     element: z.infer<typeof propertySchema> & { fkIdUSer: string }
   ): Promise<Properties | null> {

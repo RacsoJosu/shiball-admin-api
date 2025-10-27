@@ -198,7 +198,7 @@ import { pagination } from '../../shared/libs/helpers';
 import { searchPaginationParamsSchema } from '../../shared/schemas';
 import dayjs from 'dayjs';
 
-type ${pascal}DTO = z.infer<typeof input${pascal}CreateSchema>;
+type ${pascal}DTO = ${pascal};
 type ${pascal}UpdateInput = Partial<${pascal}DTO>;
 @injectable()
 export class ${pascal}Repository
@@ -242,7 +242,7 @@ export class ${pascal}Repository
       const { limit: take, skip } = pagination(params);
 
       if (params.search) {
-        params.search = %{params.search.replaceAll(' ', '%%')}%;
+        params.search = \`%{params.search.replaceAll(' ', '%%')}\`%;
       }
 
       const where = this.getWhereAll${pascal}(params);

@@ -9,6 +9,8 @@ import { bindSeedModule } from './bindings/seed.binding';
 import TYPES_COMMON from '../../types/common.types';
 import { bindPropertiesModule } from './bindings/properties.bindings';
 import { bindRoleModule } from './bindings/roles.bindings';
+import { bindDashboardModule } from './bindings/dashboard.bindings';
+import { bindReservationModule } from './bindings/reservations.bindings';
 
 const container = new Container();
 
@@ -22,5 +24,7 @@ bindAuthModule(container);
 bindSeedModule(container);
 bindPropertiesModule(container);
 bindRoleModule(container);
+bindReservationModule(container);
+bindDashboardModule(container);
 
 export default container;

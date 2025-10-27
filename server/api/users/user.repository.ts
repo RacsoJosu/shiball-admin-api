@@ -9,6 +9,7 @@ import { updateUserInput } from './dto/input-update.user.dto';
 import { createUserSquemaRepository } from '../auth/auth.schemas';
 import { IRead, IWrite } from '../../shared/interfaces';
 import { pagination } from '../../shared/libs/helpers';
+
 type UserDTO = z.infer<typeof userSafeSchema>;
 type UpdateUserInput = z.infer<typeof updateUserInput>;
 @injectable()
@@ -84,6 +85,24 @@ export class UserRepository
     });
   }
 
+  async getTotalUsers({ dateFilter }: { dateFilter?: string }) {
+    let where = {};
+    if (dateFilter) {
+      where = {
+        createdAt: {
+          gte: dayjs(dateFilter).startOf('month').toDate(),
+        },
+      };
+    }
+    return this.prisma.user.count({
+      where: {
+        AND: {
+          ...where,
+          deletedAt: null,
+        },
+      },
+    });
+  }
   async getAll(params: z.infer<typeof searchPaginationParamsSchema>) {
     const { limit, skip } = pagination(params);
 

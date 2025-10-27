@@ -2,7 +2,6 @@ import { join } from 'path';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import prompts from 'prompts';
 import { prisma } from '../server/config/db';
-import dayjs from 'dayjs';
 
 async function main() {
   const seederNamePrompt = await prompts({

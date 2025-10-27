@@ -5,6 +5,8 @@ import authRouter from '../../server/api/auth/auth.router';
 import seedRouter from '../../server/api/seed/seed.router';
 import propertiesRouter from '../../server/api/properties/properties.router';
 import rolesRouter from '../../server/api/role/role.router';
+import dashboardRouter from '../../server/api/dashboard/dashboard.router';
+
 export function getRouter() {
   const router = express.Router();
   router.use('/auth', authRouter);
@@ -12,6 +14,7 @@ export function getRouter() {
   router.use('/seed', seedRouter);
   router.use('/properties', propertiesRouter);
   router.use('/roles', rolesRouter);
+  router.use('/dashboard', dashboardRouter);
 
   return router;
 }
