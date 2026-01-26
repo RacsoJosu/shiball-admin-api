@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import './types/bigint-json';
-
+import rateLimit from 'express-rate-limit';
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -14,6 +14,7 @@ import { getRouter } from '../server/api/router';
 import logger from './logger/config';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { IncomingMessage } from 'http';
+import { concurrencyLimiter } from './concurrency';
 
 morgan.token('traceId', (req: IncomingMessage & { traceId?: string }) => {
   return req.traceId ?? 'NoTrace';
@@ -60,6 +61,16 @@ const customFormat = function (
 
   return `[${colors.bgBlue(method)}] ${colors.gray(url)} ${statusColor(status)} - ${responseTime} ms - userId: ${userId} - traceId: ${traceId} - ip: ${colors.rainbow(ip)}`;
 };
+
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message:
+    'Demasiadas solicitudes desde esta IP, por favor, inténtalo de nuevo después de 15 minutos',
+});
+
 const app = express();
 
 const PORT = process.env.PORT ?? 3001;
@@ -89,8 +100,16 @@ app.use(cookieParser());
 app.use(
   '/api',
 
+  // limiter,
+  concurrencyLimiter,
   function (req: Request, _res: Response, next: NextFunction) {
     req.traceId = uuidv4();
+    next();
+  },
+  (req, res, next) => {
+    res.setTimeout(10_000, () => {
+      res.status(504).json({ error: 'Request timeout' });
+    });
     next();
   },
   getRouter()
@@ -99,6 +118,10 @@ app.get('/test', (req, res) => {
   res.json({ message: 'Ruta de prueba funcionando' });
 });
 
+app.get('/api/slow', async (_req, res) => {
+  await new Promise((r) => setTimeout(r, 3000));
+  res.status(200).json({ ok: true });
+});
 app.use((req: Request, res: Response) => {
   res.status(404).json({ error: `Route ${req.originalUrl} not found` });
 });

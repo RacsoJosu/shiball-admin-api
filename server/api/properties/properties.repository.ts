@@ -36,7 +36,7 @@ export class PropertiesRepository
         },
       };
     }
-    return this.prisma.properties.count({
+    return await this.prisma.properties.count({
       where: {
         AND: {
           ...where,
@@ -63,7 +63,7 @@ export class PropertiesRepository
         ...base
       } = element;
 
-      return this.prisma.properties.create({
+      return await this.prisma.properties.create({
         data: {
           ...base,
           type,
@@ -86,7 +86,7 @@ export class PropertiesRepository
     if (element.type === 'VEHICLE') {
       const { brand, model, typeVehicle, type, ...base } = element;
 
-      return this.prisma.properties.create({
+      return await this.prisma.properties.create({
         data: {
           ...base,
           type,
@@ -124,7 +124,7 @@ export class PropertiesRepository
     });
   }
   async delete(id: Properties['id']): Promise<Properties | null> {
-    return this.prisma.properties.update({
+    return await this.prisma.properties.update({
       data: {
         deletedAt: dayjs().toDate(),
       },
@@ -205,7 +205,7 @@ export class PropertiesRepository
     return where;
   }
   async getById(id: Properties['id']) {
-    return this.prisma.properties.findUnique({
+    return await this.prisma.properties.findUnique({
       omit: {
         updatedAt: true,
         deletedAt: true,
