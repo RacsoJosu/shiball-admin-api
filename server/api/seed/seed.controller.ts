@@ -66,11 +66,11 @@ export class SeedController {
           data: {
             name,
             description: faker.lorem.sentence(),
-            isFree: Math.random() < 0.5,
+            isFree: faker.datatype.boolean(),
             createdBy: users[0]?.id ?? '',
           },
         })
-      )
+        )
     );
 
     console.log('Servicios creados.');
