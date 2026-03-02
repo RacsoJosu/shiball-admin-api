@@ -181,11 +181,11 @@ export class UserRepository
 
   async getRandomUser() {
     const count = await this.prisma.user.count();
-    const randomIndex = count > 0 ? Math.floor(Math.random() * count) : 0;
-
-    if (randomIndex === 0) {
-      return null;
+    if (count === 0) {
+      throw new Error('No hay usuarios disponibles.');
     }
+    const randomIndex = Math.floor(Math.random() * count);
+
     return this.prisma.user.findFirstOrThrow({
       skip: randomIndex,
     });
