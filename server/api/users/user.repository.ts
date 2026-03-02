@@ -181,8 +181,11 @@ export class UserRepository
 
   async getRandomUser() {
     const count = await this.prisma.user.count();
-    const randomIndex = Math.floor(Math.random() * count);
+    const randomIndex = count > 0 ? Math.floor(Math.random() * count) : 0;
 
+    if (randomIndex === 0) {
+      return null;
+    }
     return this.prisma.user.findFirstOrThrow({
       skip: randomIndex,
     });
