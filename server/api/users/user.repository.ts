@@ -9,6 +9,7 @@ import { updateUserInput } from './dto/input-update.user.dto';
 import { createUserSquemaRepository } from '../auth/auth.schemas';
 import { IRead, IWrite } from '../../shared/interfaces';
 import { pagination } from '../../shared/libs/helpers';
+import { randomInt } from 'crypto';
 
 type UserDTO = z.infer<typeof userSafeSchema>;
 type UpdateUserInput = z.infer<typeof updateUserInput>;
@@ -184,8 +185,7 @@ export class UserRepository
     if (count === 0) {
       throw new Error('No hay usuarios disponibles.');
     }
-    const randomIndex = Math.floor(Math.random() * count);
-
+    const randomIndex = randomInt(count);
     return this.prisma.user.findFirstOrThrow({
       skip: randomIndex,
     });
