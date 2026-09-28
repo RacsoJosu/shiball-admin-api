@@ -15,6 +15,8 @@ import logger from './logger/config';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { IncomingMessage } from 'http';
 import { concurrencyLimiter } from './concurrency';
+import { apiReference } from '@scalar/express-api-reference';
+import { getOpenApiDocument } from './config/openapi';
 
 morgan.token('traceId', (req: IncomingMessage & { traceId?: string }) => {
   return req.traceId ?? 'NoTrace';
@@ -122,6 +124,32 @@ app.get('/api/slow', async (_req, res) => {
   await new Promise((r) => setTimeout(r, 3000));
   res.status(200).json({ ok: true });
 });
+
+const isDocsEnabled =
+  process.env.NODE_ENV !== 'production' || process.env.ENABLE_DOCS === 'true';
+
+if (isDocsEnabled) {
+  // Endpoint de especificación OpenAPI en JSON (solo disponible en desarrollo o con ENABLE_DOCS=true)
+  app.get('/openapi.json', (_req: Request, res: Response) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.json(getOpenApiDocument());
+  });
+
+  // Interfaz interactiva de documentación con Scalar (solo disponible en desarrollo o con ENABLE_DOCS=true)
+  app.use(
+    '/reference',
+    apiReference({
+      theme: 'purple',
+      spec: {
+        url: '/openapi.json',
+      },
+      metaData: {
+        title: 'Shiball Admin API Reference',
+      },
+    })
+  );
+}
+
 app.use((req: Request, res: Response) => {
   res.status(404).json({ error: `Route ${req.originalUrl} not found` });
 });
@@ -134,7 +162,16 @@ app.listen(PORT, () => {
   logger.info(
     `[${colors.green('SERVER RUNNING')}] en el puerto ${colors.bgYellow(PORT.toString())}`
   );
+  if (isDocsEnabled) {
+    logger.info(
+      `[${colors.cyan('SCALAR DOCS')}] Documentación interactiva en ${colors.underline(`http://localhost:${PORT}/reference`)}`
+    );
+    logger.info(
+      `[${colors.yellow('OPENAPI SPEC')}] Especificación OpenAPI en ${colors.underline(`http://localhost:${PORT}/openapi.json`)}`
+    );
+  }
 });
+
 export default (req: VercelRequest, res: VercelResponse) => {
   app(req, res);
 };
